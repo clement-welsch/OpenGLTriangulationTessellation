@@ -26,6 +26,12 @@ The red lines show the input data and pale triangles with green outlines are wha
 - We are looking for clean, maintainable, and efficient C++ code.
 - Be creative and impress us.
 - Provide clear and detailed build instructions as we will build and run your code.
+
+First thing first, I start this project by creating a private github project to track my code and use pull requests to make evolve my code step by step.
+After that, I use "The cherno OpenGL Tutorials" to setup my visual studio project because I beleive he is really reliable.
+To load JSON files, I decided to use an homemade reader because the construction of json files provided are really simple.
+Otherwise, I would have used rapidjson that I was using at my previous job or jsoncpp.
+
 - Write your own algorithm or use third party libraries. Explain your choice.
 - Explain the algorithm that you used.
 - Describe pros and cons of your solution.
