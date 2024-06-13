@@ -3,43 +3,49 @@
 #include <fstream>
 #include <sstream>
 #include <windows.h>
+#include <vector>
 
-const char* squareShapeFilePath = "\\json\\square.json";
-const char* cShapeFilePath = "\\json\\c.json";
-const char* infiniteShapeFilePath = "\\json\\infinite.json";
-const char* chaosShapeFilePath = "\\json\\shape.json";
+const char* squareShapeFilePath = "json\\square.json";
+const char* cShapeFilePath = "json\\c.json";
+const char* infiniteShapeFilePath = "json\\infinite.json";
+const char* chaosShapeFilePath = "json\\chaos.json";
+
+struct vec2
+{
+	vec2(float _x, float _y) : x(_x), y(_y) {}
+	float x = 0.0f;
+	float y = 0.0f;
+};
 
 std::string workingdir()
 {
-	char buf[256];
+	char buf[MAX_PATH];
 	GetCurrentDirectoryA(256, buf);
 	return std::string(buf) + '\\';
 }
 
-void readJSON(const char* _filePath)
+void readJSON(const char* _filePath, std::vector<vec2>& _listVec2)
 {
-	std::string path = workingdir();
-
-	std::ifstream infile(path + std::string(squareShapeFilePath), std::ifstream::binary);
+	std::string fullpath = workingdir() + std::string(_filePath);
+	std::ifstream infile(fullpath, std::ifstream::binary);
 
 	std::string line;
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
-		int a;
-		if (iss >> a)
+		float x;
+		if (iss >> x)
 		{ 
 			std::getline(infile, line);
 			std::istringstream iss(line);
-			int b;
-			if (iss >> b)
+			float y;
+			if (iss >> y)
 			{
-				std::cout<<"a : "<<a<<" | b : "<<b<<std::endl;
+				std::cout<<"x : "<<x<<" | y : "<<y<<std::endl;
+				_listVec2.push_back(vec2(x, y));
 			}
 
-		} // error
-
-		// process pair (a,b)
+		}
 	}
 }
 
@@ -62,19 +68,21 @@ int main()
 	std::string line;
 	std::getline(std::cin, line);
 
+	std::vector<vec2> listVec2;
+
 	switch (line[0])
 	{
 	case 49:
-		readJSON(squareShapeFilePath);
+		readJSON(squareShapeFilePath, listVec2);
 		break;
 	case 50:
-		readJSON(cShapeFilePath);
+		readJSON(cShapeFilePath, listVec2);
 		break;
 	case 51:
-		readJSON(infiniteShapeFilePath);
+		readJSON(infiniteShapeFilePath, listVec2);
 		break;
 	case 52:
-		readJSON(chaosShapeFilePath);
+		readJSON(chaosShapeFilePath, listVec2);
 		break;
 	default:
 		return 0;
