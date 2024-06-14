@@ -10,23 +10,38 @@ const char* cShapeFilePath = "json\\c.json";
 const char* infiniteShapeFilePath = "json\\infinite.json";
 const char* chaosShapeFilePath = "json\\chaos.json";
 
-struct vec2
+struct Point
 {
-	vec2(float _x, float _y) : x(_x), y(_y) {}
+	Point(float _x, float _y) : x(_x), y(_y) {}
 	float x = 0.0f;
 	float y = 0.0f;
 };
 
-std::string workingdir()
+std::string GetWorkingDir()
 {
 	char buf[MAX_PATH];
 	GetCurrentDirectoryA(256, buf);
 	return std::string(buf) + '\\';
 }
 
-void readJSON(const char* _filePath, std::vector<vec2>& _listVec2)
+// Get the horizontal and vertical screen sizes in pixel
+void GetDesktopResolution(int& horizontal, int& vertical)
 {
-	std::string fullpath = workingdir() + std::string(_filePath);
+	RECT desktop;
+	// Get a handle to the desktop window
+	const HWND hDesktop = GetDesktopWindow();
+	// Get the size of screen to the variable desktop
+	GetWindowRect(hDesktop, &desktop);
+	// The top left corner will have coordinates (0,0)
+	// and the bottom right corner will have coordinates
+	// (horizontal, vertical)
+	horizontal = desktop.right;
+	vertical = desktop.bottom;
+}
+
+void ReadJSON(const char* _filePath, std::vector<Point>& _listPoints)
+{
+	std::string fullpath = GetWorkingDir() + std::string(_filePath);
 	std::ifstream infile(fullpath, std::ifstream::binary);
 
 	std::string line;
@@ -42,21 +57,36 @@ void readJSON(const char* _filePath, std::vector<vec2>& _listVec2)
 			if (iss >> y)
 			{
 				std::cout<<"x : "<<x<<" | y : "<<y<<std::endl;
-				_listVec2.push_back(vec2(x, y));
+				_listPoints.push_back(Point(x, y));
 			}
 
 		}
 	}
 }
 
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+static void error_callback(int error, const char* description)
+{
+	fputs(description, stderr);
+}
+
 int main()
 {
 	GLFWwindow* window;
+	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit())
 	{
+		std::cout << "OpenGL is not available on your device!" << std::endl;
 		return -1;
 	}
+
+	//Select JSON File
 
 	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
 	std::cout << "1-Square shape" << std::endl;
@@ -68,35 +98,77 @@ int main()
 	std::string line;
 	std::getline(std::cin, line);
 
-	std::vector<vec2> listVec2;
+	std::vector<Point> listPoints;
 
 	switch (line[0])
 	{
 	case 49:
-		readJSON(squareShapeFilePath, listVec2);
+		ReadJSON(squareShapeFilePath, listPoints);
 		break;
 	case 50:
-		readJSON(cShapeFilePath, listVec2);
+		ReadJSON(cShapeFilePath, listPoints);
 		break;
 	case 51:
-		readJSON(infiniteShapeFilePath, listVec2);
+		ReadJSON(infiniteShapeFilePath, listPoints);
 		break;
 	case 52:
-		readJSON(chaosShapeFilePath, listVec2);
+		ReadJSON(chaosShapeFilePath, listPoints);
 		break;
 	default:
 		return 0;
 	}
 
-	window = glfwCreateWindow(640, 480, "Hello World!", nullptr, nullptr);
-	glfwMakeContextCurrent(window);
+	if (listPoints.empty())
+	{
+		std::cout << "The file has not been found or is empty!" << std::endl;
+		return -1;
+	}
 
+	//Viewport Dimenssions
+	int width = 0;
+	int height = 0;
+	GetDesktopResolution(width, height);
+
+	window = glfwCreateWindow(width / 2, height / 2, "Draw Polygons", nullptr, nullptr);
+	if (window == nullptr)
+	{
+		std::cout << "Failed to create GLFW window!" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSetKeyCallback(window, key_callback);
+
+	//Render
 	while (!glfwWindowShouldClose(window))
 	{
+		float ratio;
+		glfwGetFramebufferSize(window, &width, &height);
+		ratio = width / (float)height;
+		glViewport(0, 0, width, height);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-10.0 * ratio, 10.0 * ratio, -10.0, 10.0, 10.0, -10.0);
+		glMatrixMode(GL_MODELVIEW);
+
+		glPointSize(3.0);
+		glBegin(GL_LINE_LOOP);
+			glColor3f(1.0f, 0.0f, 0.0f);
+
+			for (Point& point : listPoints)
+			{
+				glVertex3f(point.x, point.y, 0.0f);
+			}
+
+		glEnd();
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
 
 	return 0;
 }
