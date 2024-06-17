@@ -25,7 +25,7 @@ std::string GetWorkingDir()
 }
 
 // Get the horizontal and vertical screen sizes in pixel
-void GetDesktopResolution(int& horizontal, int& vertical)
+void GetDesktopResolution(int& _horizontal, int& _vertical)
 {
 	RECT desktop;
 	// Get a handle to the desktop window
@@ -35,8 +35,8 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	// The top left corner will have coordinates (0,0)
 	// and the bottom right corner will have coordinates
 	// (horizontal, vertical)
-	horizontal = desktop.right;
-	vertical = desktop.bottom;
+	_horizontal = desktop.right;
+	_vertical = desktop.bottom;
 }
 
 void ReadJSON(const char* _filePath, std::vector<Point>& _listPoints)
@@ -64,15 +64,17 @@ void ReadJSON(const char* _filePath, std::vector<Point>& _listPoints)
 	}
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(_window, GL_TRUE);
+	}
 }
 
-static void error_callback(int error, const char* description)
+static void error_callback(int _error, const char* _description)
 {
-	fputs(description, stderr);
+	fputs(_description, stderr);
 }
 
 int main()
