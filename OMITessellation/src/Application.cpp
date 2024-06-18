@@ -89,10 +89,7 @@ int main()
 		return -1;
 	}
 
-	glewInit();
-
 	//Select JSON File
-
 	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
 	std::cout << "1-Square shape" << std::endl;
 	std::cout << "2-C shape" << std::endl;
@@ -143,6 +140,12 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
+
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "GLEW was not initialized properly!" << std::endl;
+		return -1;
+	}
 
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
