@@ -11,12 +11,72 @@ const char* cShapeFilePath = "json\\c.json";
 const char* infiniteShapeFilePath = "json\\infinite.json";
 const char* chaosShapeFilePath = "json\\chaos.json";
 
-struct Point
+static unsigned int CompileShader(unsigned int _type, const std::string& _source)
 {
-	Point(float _x, float _y) : x(_x), y(_y) {}
-	float x = 0.0f;
-	float y = 0.0f;
-};
+	const unsigned int id =  glCreateShader(_type);
+	const char* src = _source.c_str();
+	glShaderSource(id, 1, &src, nullptr);
+
+	int result;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+	if (result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		char* message = (char*)alloca(length * sizeof(CHAR));
+		glGetShaderInfoLog(id, length, &length, message);
+		std::cout << "Failed to compile : ";
+		switch (_type)
+		{
+		case GL_VERTEX_SHADER:
+			std::cout << "Vertex";
+			break;
+		case GL_TESS_CONTROL_SHADER:
+			std::cout << "Tesselation control";
+			break;
+		case GL_TESS_EVALUATION_SHADER:
+			std::cout << "Tesselation evaluation";
+			break;
+		case GL_COMPUTE_SHADER:
+			std::cout << "Compute";
+			break;
+		case GL_FRAGMENT_SHADER:
+			std::cout << "Fragment";
+			break;
+		}
+		std::cout << " shader!" << std::endl;
+		std::cout << message << std::endl;
+		glDeleteShader(id);
+		return 0;
+	}
+
+	return id;
+}
+static unsigned int CreateShader(const std::string& _vertexShader, const std::string _fragmentShader)
+{
+	const unsigned int program = glCreateProgram();
+	const unsigned int vs = CompileShader(GL_VERTEX_SHADER, _vertexShader);
+	if (vs == 0)
+	{
+		return 0;
+	}
+
+	const unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, _fragmentShader);
+	if (fs == 0)
+	{
+		return 0;
+	}
+
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+	glDeleteProgram(vs);
+	glDeleteProgram(fs);
+
+	return program;
+}
 
 std::string GetWorkingDir()
 {
@@ -40,7 +100,7 @@ void GetDesktopResolution(int& _horizontal, int& _vertical)
 	_vertical = desktop.bottom;
 }
 
-void ReadJSON(const char* _filePath, std::vector<Point>& _listPoints)
+void ReadJSON(const char* _filePath, std::vector<float>& _listPoints)
 {
 	std::string fullpath = GetWorkingDir() + std::string(_filePath);
 	std::ifstream infile(fullpath, std::ifstream::binary);
@@ -49,18 +109,10 @@ void ReadJSON(const char* _filePath, std::vector<Point>& _listPoints)
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
-		float x;
-		if (iss >> x)
+		float value;
+		if (iss >> value)
 		{ 
-			std::getline(infile, line);
-			std::istringstream iss(line);
-			float y;
-			if (iss >> y)
-			{
-				std::cout<<"x : "<<x<<" | y : "<<y<<std::endl;
-				_listPoints.push_back(Point(x, y));
-			}
-
+			_listPoints.push_back(value);
 		}
 	}
 }
@@ -100,31 +152,36 @@ int main()
 	std::string line;
 	std::getline(std::cin, line);
 
-	std::vector<Point> listPoints;
+	std::vector<float> tempListPoints;
 
 	switch (line[0])
 	{
 	case 49:
-		ReadJSON(squareShapeFilePath, listPoints);
+		ReadJSON(squareShapeFilePath, tempListPoints);
 		break;
 	case 50:
-		ReadJSON(cShapeFilePath, listPoints);
+		ReadJSON(cShapeFilePath, tempListPoints);
 		break;
 	case 51:
-		ReadJSON(infiniteShapeFilePath, listPoints);
+		ReadJSON(infiniteShapeFilePath, tempListPoints);
 		break;
 	case 52:
-		ReadJSON(chaosShapeFilePath, listPoints);
+		ReadJSON(chaosShapeFilePath, tempListPoints);
 		break;
 	default:
 		return 0;
 	}
 
-	if (listPoints.empty())
+	if (tempListPoints.empty())
 	{
 		std::cout << "The file has not been found or is empty!" << std::endl;
 		return -1;
 	}
+
+	//create an array of points
+	const float* arrayPoints = &tempListPoints[0];
+	const unsigned int sizeArray = tempListPoints.size();
+	tempListPoints.clear();
 
 	//Viewport Dimenssions
 	int width = 0;
@@ -149,6 +206,19 @@ int main()
 
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, sizeArray * sizeof(float));
+	glBufferData(GL_ARRAY_BUFFER, sizeArray * sizeof(float), arrayPoints, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
+	const std::string vertexShader = "";
+	const std::string fragmentShader = "";
+	if (unsigned int program = CreateShader(vertexShader, fragmentShader) == 0)
+	{
+		std::cout << "Shaders creation or compiling error!" << std::endl;
+		return -1;
+	}
 
 	//Render
 	while (!glfwWindowShouldClose(window))
@@ -163,7 +233,8 @@ int main()
 		glOrtho(-10.0 * ratio, 10.0 * ratio, -10.0, 10.0, 10.0, -10.0);
 		glMatrixMode(GL_MODELVIEW);
 
-		glPointSize(3.0);
+		
+		/*glPointSize(3.0);
 		glBegin(GL_LINE_LOOP);
 			glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -172,7 +243,7 @@ int main()
 				glVertex3f(point.x, point.y, 0.0f);
 			}
 
-		glEnd();
+		glEnd();*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
