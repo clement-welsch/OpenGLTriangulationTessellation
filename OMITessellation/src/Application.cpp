@@ -6,20 +6,105 @@
 #include <windows.h>
 #include <vector>
 
-const char* squareShapeFilePath = "json\\square.json";
-const char* cShapeFilePath = "json\\c.json";
-const char* infiniteShapeFilePath = "json\\infinite.json";
-const char* chaosShapeFilePath = "json\\chaos.json";
+const static char* s_squareShapeFilePath = "json\\square.json";
+const static char* s_cShapeFilePath = "json\\c.json";
+const static char* s_infiniteShapeFilePath = "json\\infinite.json";
+const static char* s_chaosShapeFilePath = "json\\chaos.json";
+
+static std::string GetWorkingDir()
+{
+	char buf[MAX_PATH];
+	GetCurrentDirectoryA(256, buf);
+	return std::string(buf) + '\\';
+}
+
+const static std::string s_dirPath = GetWorkingDir().c_str();
+const static std::string s_vertexShaderPath = "shader\\Basic.vs";
+const static std::string s_fragmentShaderPath = "shader\\Basic.fs";
+const static std::string s_shaderPath = "shader\\Basic.shader";
+
+// Get the horizontal and vertical screen sizes in pixel
+void GetDesktopResolution(int& _horizontal, int& _vertical)
+{
+	RECT desktop;
+	// Get a handle to the desktop window
+	const HWND hDesktop = GetDesktopWindow();
+	// Get the size of screen to the variable desktop
+	GetWindowRect(hDesktop, &desktop);
+	// The top left corner will have coordinates (0,0)
+	// and the bottom right corner will have coordinates
+	// (horizontal, vertical)
+	_horizontal = desktop.right;
+	_vertical = desktop.bottom;
+}
+
+void ReadJSON(const char* _filePath, std::vector<float>& _listPoints)
+{
+	std::string fullpath = s_dirPath + std::string(_filePath);
+	std::ifstream infile(fullpath, std::ifstream::binary);
+
+	std::string line;
+	while (std::getline(infile, line))
+	{
+		std::istringstream iss(line);
+		float value;
+		if (iss >> value)
+		{
+			_listPoints.push_back(value);
+		}
+	}
+}
+
+struct ShaderSources
+{
+	std::string vertexSource;
+	std::string fragmentSource;
+};
+
+static ShaderSources ParseShader(const std::string& _filePath)
+{
+	std::ifstream stream(_filePath);
+
+	enum class ShaderType
+	{
+		NONE = -1, VERTEX = 0, FRAGMENT = 1
+	};
+
+	std::string line;
+	std::stringstream ss[2];
+	ShaderType type = ShaderType::NONE;
+
+	while (std::getline(stream, line))
+	{
+		if (line.find("#shader") != std::string::npos)
+		{
+			if (line.find("vertex") != std::string::npos)
+			{
+				type = ShaderType::VERTEX;
+			}
+			else if (line.find("fragment") != std::string::npos)
+			{
+				type = ShaderType::FRAGMENT;
+			}
+		}
+		else
+		{
+			ss[(int)type] << line << '\n';
+		}
+	}
+
+	return { ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str() };
+}
 
 static unsigned int CompileShader(unsigned int _type, const std::string& _source)
 {
-	const unsigned int id =  glCreateShader(_type);
+	unsigned int id =  glCreateShader(_type);
 	const char* src = _source.c_str();
 	glShaderSource(id, 1, &src, nullptr);
 
 	int result;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
+	/*if (result == GL_FALSE)
 	{
 		int length;
 		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
@@ -48,10 +133,11 @@ static unsigned int CompileShader(unsigned int _type, const std::string& _source
 		std::cout << message << std::endl;
 		glDeleteShader(id);
 		return 0;
-	}
+	}*/
 
 	return id;
 }
+
 static unsigned int CreateShader(const std::string& _vertexShader, const std::string _fragmentShader)
 {
 	const unsigned int program = glCreateProgram();
@@ -76,45 +162,6 @@ static unsigned int CreateShader(const std::string& _vertexShader, const std::st
 	glDeleteProgram(fs);
 
 	return program;
-}
-
-std::string GetWorkingDir()
-{
-	char buf[MAX_PATH];
-	GetCurrentDirectoryA(256, buf);
-	return std::string(buf) + '\\';
-}
-
-// Get the horizontal and vertical screen sizes in pixel
-void GetDesktopResolution(int& _horizontal, int& _vertical)
-{
-	RECT desktop;
-	// Get a handle to the desktop window
-	const HWND hDesktop = GetDesktopWindow();
-	// Get the size of screen to the variable desktop
-	GetWindowRect(hDesktop, &desktop);
-	// The top left corner will have coordinates (0,0)
-	// and the bottom right corner will have coordinates
-	// (horizontal, vertical)
-	_horizontal = desktop.right;
-	_vertical = desktop.bottom;
-}
-
-void ReadJSON(const char* _filePath, std::vector<float>& _listPoints)
-{
-	std::string fullpath = GetWorkingDir() + std::string(_filePath);
-	std::ifstream infile(fullpath, std::ifstream::binary);
-
-	std::string line;
-	while (std::getline(infile, line))
-	{
-		std::istringstream iss(line);
-		float value;
-		if (iss >> value)
-		{ 
-			_listPoints.push_back(value);
-		}
-	}
 }
 
 static void key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
@@ -157,16 +204,16 @@ int main()
 	switch (line[0])
 	{
 	case 49:
-		ReadJSON(squareShapeFilePath, tempListPoints);
+		ReadJSON(s_squareShapeFilePath, tempListPoints);
 		break;
 	case 50:
-		ReadJSON(cShapeFilePath, tempListPoints);
+		ReadJSON(s_cShapeFilePath, tempListPoints);
 		break;
 	case 51:
-		ReadJSON(infiniteShapeFilePath, tempListPoints);
+		ReadJSON(s_infiniteShapeFilePath, tempListPoints);
 		break;
 	case 52:
-		ReadJSON(chaosShapeFilePath, tempListPoints);
+		ReadJSON(s_chaosShapeFilePath, tempListPoints);
 		break;
 	default:
 		return 0;
@@ -180,7 +227,7 @@ int main()
 
 	//create an array of points
 	const float* arrayPoints = &tempListPoints[0];
-	const unsigned int sizeArray = tempListPoints.size();
+	const unsigned int sizeArray = (int) tempListPoints.size();
 	tempListPoints.clear();
 
 	//Viewport Dimenssions
@@ -212,18 +259,21 @@ int main()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-	const std::string vertexShader = "";
-	const std::string fragmentShader = "";
-	if (unsigned int program = CreateShader(vertexShader, fragmentShader) == 0)
+	//unsigned int program = CreateShader(s_dirPath + s_vertexShaderPath, s_dirPath + s_fragmentShaderPath);
+	ShaderSources shaderSources = ParseShader(s_dirPath + s_shaderPath);
+	unsigned int program = CreateShader(shaderSources.vertexSource, shaderSources.fragmentSource);
+	if (program == 0)
 	{
 		std::cout << "Shaders creation or compiling error!" << std::endl;
 		return -1;
 	}
 
+	glUseProgram(program);
+
 	//Render
 	while (!glfwWindowShouldClose(window))
 	{
-		float ratio;
+		/*float ratio;
 		glfwGetFramebufferSize(window, &width, &height);
 		ratio = width / (float)height;
 		glViewport(0, 0, width, height);
@@ -234,7 +284,7 @@ int main()
 		glMatrixMode(GL_MODELVIEW);
 
 		
-		/*glPointSize(3.0);
+		glPointSize(3.0);
 		glBegin(GL_LINE_LOOP);
 			glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -243,12 +293,28 @@ int main()
 				glVertex3f(point.x, point.y, 0.0f);
 			}
 
-		glEnd();*/
+		glEnd();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();*/
+
+		float ratio;
+		glfwGetFramebufferSize(window, &width, &height);
+		ratio = width / (float)height;
+		glViewport(0, 0, width, height);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-10.0 * ratio, 10.0 * ratio, -10.0, 10.0, 10.0, -10.0);
+		glMatrixMode(GL_MODELVIEW);
+
+		glDrawArrays(GL_TRIANGLES, 0, sizeArray);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
+	glDeleteProgram(program);
 	glfwDestroyWindow(window);
 	glfwTerminate();
 
