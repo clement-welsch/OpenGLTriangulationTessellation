@@ -1,4 +1,5 @@
 #include <iostream>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <sstream>
@@ -88,6 +89,8 @@ int main()
 		return -1;
 	}
 
+	glewInit();
+
 	//Select JSON File
 
 	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
@@ -140,6 +143,9 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
+
+	unsigned int buffer;
+	glGenBuffers(1, &buffer);
 
 	//Render
 	while (!glfwWindowShouldClose(window))
