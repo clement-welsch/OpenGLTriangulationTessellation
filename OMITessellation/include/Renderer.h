@@ -1,5 +1,6 @@
 #pragma once
 #include <GL/glew.h>
+#include <cassert>
 
 #define ASSERT(x) if (!(x)) assert(false)
 
