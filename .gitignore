@@ -34,5 +34,5 @@
 
 [xX]64/
 .vs/
-*.vcxproj.filters
+#*.vcxproj.filters
 *.vcxproj.user
