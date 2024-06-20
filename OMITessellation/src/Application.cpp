@@ -6,6 +6,9 @@
 #include <windows.h>
 #include <vector>
 #include <limits>
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 const static char* s_squareShapeFilePath = "json\\square.json";
 const static char* s_cShapeFilePath = "json\\c.json";
@@ -393,20 +396,14 @@ int main(void)
 	glBindVertexArray(vao);
 
 	// Create vertex buffer and copy data
-	GLuint buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
+	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
 
 	// define vertex layout
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
 	// Create indices buffer and copy data
-	unsigned int ibo;
-	glGenBuffers(1, &ibo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
 
 	//Shader setup
 	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
@@ -427,7 +424,7 @@ int main(void)
 		glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
 
 		glBindVertexArray(vao);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		ib->Bind();
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
@@ -437,7 +434,8 @@ int main(void)
 	}
 
 	// Cleanup VBO
-	glDeleteBuffers(1, &buffer);
+	delete vb;
+	delete ib;
 	glDeleteVertexArrays(1, &VertexArrayID);
 	glDeleteProgram(shader);
 
