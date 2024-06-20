@@ -5,6 +5,7 @@
 #include <sstream>
 #include <windows.h>
 #include <vector>
+#include <limits>
 
 const static char* s_squareShapeFilePath = "json\\square.json";
 const static char* s_cShapeFilePath = "json\\c.json";
@@ -19,9 +20,15 @@ static std::string GetWorkingDir()
 }
 
 const static std::string s_dirPath = GetWorkingDir().c_str();
-const static std::string s_vertexShaderPath = "shader\\Basic.vs";
-const static std::string s_fragmentShaderPath = "shader\\Basic.fs";
-const static std::string s_shaderPath = "shader\\Basic.shader";
+const static std::string s_vertexShaderPath = "res\\shader\\Basic.vs";
+const static std::string s_fragmentShaderPath = "res\\shader\\Basic.fs";
+const static std::string s_shaderPath = "res\\shader\\Basic.shader";
+
+static double s_ortho = 10.0f;
+static float s_xMin = FLT_MAX;
+static float s_xMax = FLT_MIN;
+static float s_yMin = FLT_MAX;
+static float s_yMax = FLT_MIN;
 
 // Get the horizontal and vertical screen sizes in pixel
 void GetDesktopResolution(int& _horizontal, int& _vertical)
@@ -51,6 +58,18 @@ void ReadJSON(const char* _filePath, std::vector<float>& _listPoints)
 		if (iss >> value)
 		{
 			_listPoints.push_back(value);
+
+			//xMin-xMax-yMin-yMax
+			if (_listPoints.size() % 2 != 0)
+			{
+				s_xMin = min(s_xMin, value);
+				s_xMax = max(s_xMax, value);
+			}
+			else
+			{
+				s_yMin = min(s_yMin, value);
+				s_yMax = max(s_yMax, value);
+			}
 		}
 	}
 }
@@ -98,17 +117,18 @@ static ShaderSources ParseShader(const std::string& _filePath)
 
 static unsigned int CompileShader(unsigned int _type, const std::string& _source)
 {
-	unsigned int id =  glCreateShader(_type);
+	unsigned int id = glCreateShader(_type);
 	const char* src = _source.c_str();
 	glShaderSource(id, 1, &src, nullptr);
+	glCompileShader(id);
 
 	int result;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	/*if (result == GL_FALSE)
+	if (result == GL_FALSE)
 	{
 		int length;
 		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*)alloca(length * sizeof(CHAR));
+		char* message = (char*)alloca(length * sizeof(char));
 		glGetShaderInfoLog(id, length, &length, message);
 		std::cout << "Failed to compile : ";
 		switch (_type)
@@ -133,33 +153,40 @@ static unsigned int CompileShader(unsigned int _type, const std::string& _source
 		std::cout << message << std::endl;
 		glDeleteShader(id);
 		return 0;
-	}*/
+	}
 
 	return id;
 }
 
-static unsigned int CreateShader(const std::string& _vertexShader, const std::string _fragmentShader)
+static unsigned int CreateShader(const std::string& _vertexShader, const std::string& _fragmentShader)
 {
-	const unsigned int program = glCreateProgram();
-	const unsigned int vs = CompileShader(GL_VERTEX_SHADER, _vertexShader);
-	if (vs == 0)
-	{
-		return 0;
-	}
-
-	const unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, _fragmentShader);
-	if (fs == 0)
-	{
-		return 0;
-	}
+	// create a shader program
+	unsigned int program = glCreateProgram();
+	unsigned int vs = CompileShader(GL_VERTEX_SHADER, _vertexShader);
+	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, _fragmentShader);
 
 	glAttachShader(program, vs);
 	glAttachShader(program, fs);
+
 	glLinkProgram(program);
+
+	GLint program_linked;
+
+	glGetProgramiv(program, GL_LINK_STATUS, &program_linked);
+	std::cout << "Program link status: " << program_linked << std::endl;
+	if (program_linked != GL_TRUE)
+	{
+		GLsizei log_length = 0;
+		GLchar message[1024];
+		glGetProgramInfoLog(program, 1024, &log_length, message);
+		std::cout << "Failed to link program" << std::endl;
+		std::cout << message << std::endl;
+	}
+
 	glValidateProgram(program);
 
-	glDeleteProgram(vs);
-	glDeleteProgram(fs);
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 
 	return program;
 }
@@ -170,6 +197,16 @@ static void key_callback(GLFWwindow* _window, int _key, int _scancode, int _acti
 	{
 		glfwSetWindowShouldClose(_window, GL_TRUE);
 	}
+	else if (_key == GLFW_KEY_DOWN && _action == GLFW_PRESS)
+	{
+		s_ortho--;
+		s_ortho = max(0.0, s_ortho);
+	}
+	else if (_key == GLFW_KEY_UP && _action == GLFW_PRESS)
+	{
+		s_ortho++;
+		s_ortho = min(1000.0, s_ortho);
+	}
 }
 
 static void error_callback(int _error, const char* _description)
@@ -177,7 +214,7 @@ static void error_callback(int _error, const char* _description)
 	fputs(_description, stderr);
 }
 
-int main()
+/*int main()
 {
 	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
@@ -251,10 +288,13 @@ int main()
 		return -1;
 	}
 
+	//-------------------------------------------------
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, sizeArray * sizeof(float));
 	glBufferData(GL_ARRAY_BUFFER, sizeArray * sizeof(float), arrayPoints, GL_STATIC_DRAW);
+
+	//-------------------------------------------------
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
@@ -273,49 +313,128 @@ int main()
 	//Render
 	while (!glfwWindowShouldClose(window))
 	{
-		/*float ratio;
-		glfwGetFramebufferSize(window, &width, &height);
-		ratio = width / (float)height;
-		glViewport(0, 0, width, height);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(-10.0 * ratio, 10.0 * ratio, -10.0, 10.0, 10.0, -10.0);
-		glMatrixMode(GL_MODELVIEW);
 
-		
-		glPointSize(3.0);
-		glBegin(GL_LINE_LOOP);
-			glColor3f(1.0f, 0.0f, 0.0f);
-
-			for (Point& point : listPoints)
-			{
-				glVertex3f(point.x, point.y, 0.0f);
-			}
-
-		glEnd();
-
-		glfwSwapBuffers(window);
-		glfwPollEvents();*/
-
-		float ratio;
-		glfwGetFramebufferSize(window, &width, &height);
-		ratio = width / (float)height;
-		glViewport(0, 0, width, height);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(-10.0 * ratio, 10.0 * ratio, -10.0, 10.0, 10.0, -10.0);
-		glMatrixMode(GL_MODELVIEW);
-
+		// Draw the triangle !
 		glDrawArrays(GL_TRIANGLES, 0, sizeArray);
 
+		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	glDeleteProgram(program);
 	glfwDestroyWindow(window);
+	glfwTerminate();
+
+	return 0;
+}*/
+
+int main(void)
+{
+	// Initialise GLFW
+	if (!glfwInit())
+	{
+		std::cout << "Failed to initialize GLEW" << std::endl;
+		return -1;
+	}
+
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	// Open a window and create its OpenGL context
+	GLFWwindow* window = glfwCreateWindow(1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
+	if (window == NULL)
+	{
+		std::cout << "Failed to initialize GLFW" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+
+	// Initialize GLEW
+	glewExperimental = true; // Needed for core profile
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "Failed to initialize GLEW" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+
+	std::cout << "Using GL Version: " << glGetString(GL_VERSION) << std::endl;
+
+	// Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
+	// Dark blue background
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+
+	float positions[] = {
+		-0.5f, -0.5f,
+		 0.5f,  -0.5f,
+		 0.5f, 0.5f,
+		 -0.5f, 0.5f,
+	};
+
+	unsigned int indices[] = {
+		0,1,2,
+		2,3,0
+	};
+
+	// Create vertex buffer and copy data
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
+
+	// define vertex layout
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+
+	// Create indices buffer and copy data
+	unsigned int ibo;
+	glGenBuffers(1, &ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
+	//Shader setup
+	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
+	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
+	glUseProgram(shader);
+
+	int location = glGetUniformLocation(shader, "u_color");
+	if (location == -1)
+	{
+		return -1;
+	}
+	glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		// Clear the screen
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+		// Swap buffers
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	// Cleanup VBO
+	glDeleteBuffers(1, &buffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteProgram(shader);
+
+	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
 
 	return 0;
