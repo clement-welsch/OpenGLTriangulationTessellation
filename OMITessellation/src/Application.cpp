@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <vector>
 #include <limits>
+#include "Renderer.h"
 
 const static char* s_squareShapeFilePath = "json\\square.json";
 const static char* s_cShapeFilePath = "json\\c.json";
