@@ -396,14 +396,14 @@ int main(void)
 	glBindVertexArray(vao);
 
 	// Create vertex buffer and copy data
-	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
 
 	// define vertex layout
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
 	// Create indices buffer and copy data
-	IndexBuffer ib(indices, 6);
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
 
 	//Shader setup
 	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
@@ -424,7 +424,7 @@ int main(void)
 		glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
 
 		glBindVertexArray(vao);
-		ib.Bind();
+		ib->Bind();
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
@@ -434,7 +434,8 @@ int main(void)
 	}
 
 	// Cleanup VBO
-	//glDeleteBuffers(1, &buffer);
+	delete vb;
+	delete ib;
 	glDeleteVertexArrays(1, &VertexArrayID);
 	glDeleteProgram(shader);
 
