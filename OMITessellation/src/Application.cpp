@@ -340,8 +340,8 @@ int main(void)
 	}
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -388,6 +388,10 @@ int main(void)
 		2,3,0
 	};
 
+	unsigned int vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
 	// Create vertex buffer and copy data
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
@@ -407,21 +411,24 @@ int main(void)
 	//Shader setup
 	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
 	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
-	glUseProgram(shader);
 
 	int location = glGetUniformLocation(shader, "u_color");
 	if (location == -1)
 	{
 		return -1;
 	}
-	glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		glUseProgram(shader);
 		glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
+
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		// Swap buffers
