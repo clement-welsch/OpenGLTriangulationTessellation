@@ -244,6 +244,7 @@ int main(void)
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
@@ -278,42 +279,44 @@ int main(void)
 		2,3,0
 	};
 
-	VertexArray va;
-	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
-	VertexBufferLayout layout;
-	layout.Push<float>(2);
-	va.AddBuffer(vb, layout);
-
-	// Create indices buffer and copy data
-	IndexBuffer* ib = new IndexBuffer(indices, 6);
-
-	//Shader setup
-	Shader shader(s_dirPath + s_shaderPath);
-	shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-
-	ib->Unbind();
-	va.Unbind();
-	vb->Unbind();
-	shader.Unbind();
-
-	Renderer renderer;
-
-	while (!glfwWindowShouldClose(window))
 	{
-		// Clear the screen
-		renderer.Clear();
-		renderer.Draw(va, ib, shader);
-		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+		VertexArray va;
+		VertexBuffer vb (positions, 4 * 2 * sizeof(float));
+		IndexBuffer ib(indices, 6);
 
-		// Swap buffers
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		VertexBufferLayout layout;
+		layout.Push<float>(2);
+		va.AddBuffer(vb, layout);
+
+		//Shader setup
+		Shader shader(s_dirPath + s_shaderPath);
+		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		
+		Renderer renderer;
+
+		while (!glfwWindowShouldClose(window))
+		{
+			// Clear the screen
+			renderer.Clear();
+			
+			shader.Bind();
+			shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+
+			renderer.Draw(va, ib, shader);
+
+			// Swap buffers
+			GLCall(glfwSwapBuffers(window));
+			GLCall(glfwPollEvents());
+		}
+
+		ib.Unbind();
+		va.Unbind();
+		vb.Unbind();
+		shader.Unbind();
+
+		// Cleanup VBO
+		GLCall(glDeleteVertexArrays(1, &VertexArrayID));
 	}
-
-	// Cleanup VBO
-	delete vb;
-	delete ib;
-	GLCall(glDeleteVertexArrays(1, &VertexArrayID));
 	
 
 	// Close OpenGL window and terminate GLFW

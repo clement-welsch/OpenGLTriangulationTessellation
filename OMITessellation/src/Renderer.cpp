@@ -48,12 +48,11 @@ void Renderer::Clear() const
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Draw(const VertexArray& _va, const IndexBuffer* _ib, const Shader& _shader) const
+void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, const Shader& _shader) const
 {
     _shader.Bind();
-    //_shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
-    _ib->Bind();
+    _ib.Bind();
     _va.Bind();
 
-    glDrawElements(GL_TRIANGLES, _ib->GetCount(), GL_UNSIGNED_INT, nullptr);
+    GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }

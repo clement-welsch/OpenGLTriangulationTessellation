@@ -15,6 +15,7 @@ public:
 
 	//set uniforms
 	void SetUniform4f(const std::string& _name, float _v0, float _v1, float _v2, float _v3);
+	unsigned int GetRendererID() const { return m_rendererID; }
 
 private:
 	ShaderSources ParseShader(const std::string& _filePath);
