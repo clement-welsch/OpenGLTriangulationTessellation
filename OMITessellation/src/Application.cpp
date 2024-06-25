@@ -289,25 +289,21 @@ int main(void)
 
 	//Shader setup
 	Shader shader(s_dirPath + s_shaderPath);
-	shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+	shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 	ib->Unbind();
 	va.Unbind();
 	vb->Unbind();
 	shader.Unbind();
 
+	Renderer renderer;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		shader.Bind();
-		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
-
-		ib->Bind();
-		va.Bind();
-
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		renderer.Clear();
+		renderer.Draw(va, ib, shader);
+		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
