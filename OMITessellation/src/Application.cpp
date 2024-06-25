@@ -406,11 +406,8 @@ int main(void)
 	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
 	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
 
-	int location = glGetUniformLocation(shader, "u_color");
-	if (location == -1)
-	{
-		return -1;
-	}
+	GLCall(int location = glGetUniformLocation(shader, "u_color"));
+	ASSERT(location != -1);
 
 	while (!glfwWindowShouldClose(window))
 	{
