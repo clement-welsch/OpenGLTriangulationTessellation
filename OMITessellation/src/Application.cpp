@@ -244,6 +244,7 @@ int main(void)
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
@@ -299,7 +300,7 @@ int main(void)
 	while (!glfwWindowShouldClose(window))
 	{
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT);
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
 		shader.Bind();
 		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
@@ -307,11 +308,11 @@ int main(void)
 		ib->Bind();
 		va.Bind();
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 		// Swap buffers
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		GLCall(glfwSwapBuffers(window));
+		GLCall(glfwPollEvents());
 	}
 
 	// Cleanup VBO
