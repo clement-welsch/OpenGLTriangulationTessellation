@@ -1,7 +1,10 @@
 #pragma once
-#include <windows.h>
 #include <GL/glew.h>
 #include <cassert>
+
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include "VertexArray.h"
 
 #define ASSERT(x) if (!(x)) assert(false)
 
@@ -12,3 +15,10 @@
 void GLClearError();
 
 bool GLCheckError();
+
+class Renderer
+{
+public :
+    void Clear() const;
+    void Draw(const VertexArray& _va, const IndexBuffer& _ib, const Shader& _shader) const;
+};

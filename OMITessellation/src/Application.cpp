@@ -279,47 +279,44 @@ int main(void)
 		2,3,0
 	};
 
-	//Shader setup
-	Shader* shader = new Shader(s_dirPath + s_shaderPath);
-	shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
-
-	VertexArray va;
-	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
-	VertexBufferLayout layout;
-	layout.Push<float>(2);
-	va.AddBuffer(vb, layout);
-
-	// Create indices buffer and copy data
-	IndexBuffer* ib = new IndexBuffer(indices, 6);
-
-	while (!glfwWindowShouldClose(window))
 	{
-		// Clear the screen
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		VertexArray va;
+		VertexBuffer vb (positions, 4 * 2 * sizeof(float));
+		IndexBuffer ib(indices, 6);
 
-		shader->Bind();
-		shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		VertexBufferLayout layout;
+		layout.Push<float>(2);
+		va.AddBuffer(vb, layout);
 
-		ib->Bind();
-		va.Bind();
+		//Shader setup
+		Shader shader(s_dirPath + s_shaderPath);
+		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		
+		Renderer renderer;
 
-		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		while (!glfwWindowShouldClose(window))
+		{
+			// Clear the screen
+			renderer.Clear();
+			
+			shader.Bind();
+			shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
-		// Swap buffers
-		GLCall(glfwSwapBuffers(window));
-		GLCall(glfwPollEvents());
+			renderer.Draw(va, ib, shader);
+
+			// Swap buffers
+			GLCall(glfwSwapBuffers(window));
+			GLCall(glfwPollEvents());
+		}
+
+		ib.Unbind();
+		va.Unbind();
+		vb.Unbind();
+		shader.Unbind();
+
+		// Cleanup VBO
+		GLCall(glDeleteVertexArrays(1, &VertexArrayID));
 	}
-
-	ib->Unbind();
-	va.Unbind();
-	vb->Unbind();
-	shader->Unbind();
-
-	// Cleanup VBO
-	delete vb;
-	delete ib;
-	delete shader;
-	GLCall(glDeleteVertexArrays(1, &VertexArrayID));
 	
 
 	// Close OpenGL window and terminate GLFW

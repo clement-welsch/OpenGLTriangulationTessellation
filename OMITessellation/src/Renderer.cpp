@@ -42,3 +42,17 @@ bool GLCheckError()
     }
     return true;
 }
+
+void Renderer::Clear() const
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, const Shader& _shader) const
+{
+    _shader.Bind();
+    _ib.Bind();
+    _va.Bind();
+
+    GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+}
