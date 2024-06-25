@@ -15,15 +15,16 @@ public:
 
 	//set uniforms
 	void SetUniform4f(const std::string& _name, float _v0, float _v1, float _v2, float _v3);
+	unsigned int GetRendererID() const { return m_rendererID; }
 
 private:
 	ShaderSources ParseShader(const std::string& _filePath);
 	unsigned int CompileShader(unsigned int _type, const std::string& _source);
 	unsigned int CreateShader(const std::string& _vertexShader, const std::string& _fragmentShader);
 
-	unsigned int GetUniformLocation(const std::string& _name);
+	int GetUniformLocation(const std::string& _name);
 
 	unsigned int m_rendererID;
 	std::string m_filePath;
-	std::unordered_map<std::string, unsigned int> m_uniformLocationCache;
+	std::unordered_map<std::string, int> m_uniformLocationCache;
 };

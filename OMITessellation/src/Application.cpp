@@ -279,6 +279,10 @@ int main(void)
 		2,3,0
 	};
 
+	//Shader setup
+	Shader* shader = new Shader(s_dirPath + s_shaderPath);
+	shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+
 	VertexArray va;
 	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
 	VertexBufferLayout layout;
@@ -288,22 +292,13 @@ int main(void)
 	// Create indices buffer and copy data
 	IndexBuffer* ib = new IndexBuffer(indices, 6);
 
-	//Shader setup
-	Shader shader(s_dirPath + s_shaderPath);
-	shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
-
-	ib->Unbind();
-	va.Unbind();
-	vb->Unbind();
-	shader.Unbind();
-
 	while (!glfwWindowShouldClose(window))
 	{
 		// Clear the screen
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		shader.Bind();
-		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		shader->Bind();
+		shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 		ib->Bind();
 		va.Bind();
@@ -315,9 +310,15 @@ int main(void)
 		GLCall(glfwPollEvents());
 	}
 
+	ib->Unbind();
+	va.Unbind();
+	vb->Unbind();
+	shader->Unbind();
+
 	// Cleanup VBO
 	delete vb;
 	delete ib;
+	delete shader;
 	GLCall(glDeleteVertexArrays(1, &VertexArrayID));
 	
 
