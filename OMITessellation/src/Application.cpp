@@ -6,11 +6,13 @@
 #include <sstream>
 #include <vector>
 #include <limits>
+
+#include "IndexBuffer.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "VertexArray.h"
-#include "IndexBuffer.h"
+#include "Shader.h"
 
 const static char* s_squareShapeFilePath = "json\\square.json";
 const static char* s_cShapeFilePath = "json\\c.json";
@@ -77,123 +79,6 @@ void ReadJSON(const char* _filePath, std::vector<float>& _listPoints)
 			}
 		}
 	}
-}
-
-struct ShaderSources
-{
-	std::string vertexSource;
-	std::string fragmentSource;
-};
-
-static ShaderSources ParseShader(const std::string& _filePath)
-{
-	std::ifstream stream(_filePath);
-
-	enum class ShaderType
-	{
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
-	};
-
-	std::string line;
-	std::stringstream ss[2];
-	ShaderType type = ShaderType::NONE;
-
-	while (std::getline(stream, line))
-	{
-		if (line.find("#shader") != std::string::npos)
-		{
-			if (line.find("vertex") != std::string::npos)
-			{
-				type = ShaderType::VERTEX;
-			}
-			else if (line.find("fragment") != std::string::npos)
-			{
-				type = ShaderType::FRAGMENT;
-			}
-		}
-		else
-		{
-			ss[(int)type] << line << '\n';
-		}
-	}
-
-	return { ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str() };
-}
-
-static unsigned int CompileShader(unsigned int _type, const std::string& _source)
-{
-	unsigned int id = glCreateShader(_type);
-	const char* src = _source.c_str();
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
-
-	int result;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
-	{
-		int length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*)alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-		std::cout << "Failed to compile : ";
-		switch (_type)
-		{
-		case GL_VERTEX_SHADER:
-			std::cout << "Vertex";
-			break;
-		case GL_TESS_CONTROL_SHADER:
-			std::cout << "Tesselation control";
-			break;
-		case GL_TESS_EVALUATION_SHADER:
-			std::cout << "Tesselation evaluation";
-			break;
-		case GL_COMPUTE_SHADER:
-			std::cout << "Compute";
-			break;
-		case GL_FRAGMENT_SHADER:
-			std::cout << "Fragment";
-			break;
-		}
-		std::cout << " shader!" << std::endl;
-		std::cout << message << std::endl;
-		glDeleteShader(id);
-		return 0;
-	}
-
-	return id;
-}
-
-static unsigned int CreateShader(const std::string& _vertexShader, const std::string& _fragmentShader)
-{
-	// create a shader program
-	unsigned int program = glCreateProgram();
-	unsigned int vs = CompileShader(GL_VERTEX_SHADER, _vertexShader);
-	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, _fragmentShader);
-
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-
-	glLinkProgram(program);
-
-	GLint program_linked;
-
-	glGetProgramiv(program, GL_LINK_STATUS, &program_linked);
-	std::cout << "Program link status: " << program_linked << std::endl;
-	if (program_linked != GL_TRUE)
-	{
-		GLsizei log_length = 0;
-		GLchar message[1024];
-		glGetProgramInfoLog(program, 1024, &log_length, message);
-		std::cout << "Failed to link program" << std::endl;
-		std::cout << message << std::endl;
-	}
-
-	glValidateProgram(program);
-
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
 }
 
 static void key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
@@ -359,6 +244,7 @@ int main(void)
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
@@ -393,6 +279,10 @@ int main(void)
 		2,3,0
 	};
 
+	//Shader setup
+	Shader* shader = new Shader(s_dirPath + s_shaderPath);
+	shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+
 	VertexArray va;
 	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
 	VertexBufferLayout layout;
@@ -402,36 +292,35 @@ int main(void)
 	// Create indices buffer and copy data
 	IndexBuffer* ib = new IndexBuffer(indices, 6);
 
-	//Shader setup
-	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
-	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
-
-	GLCall(int location = glGetUniformLocation(shader, "u_color"));
-	ASSERT(location != -1);
-
 	while (!glfwWindowShouldClose(window))
 	{
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT);
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		GLCall(glUseProgram(shader));
-		GLCall(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
+		shader->Bind();
+		shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 		ib->Bind();
 		va.Bind();
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 		// Swap buffers
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		GLCall(glfwSwapBuffers(window));
+		GLCall(glfwPollEvents());
 	}
+
+	ib->Unbind();
+	va.Unbind();
+	vb->Unbind();
+	shader->Unbind();
 
 	// Cleanup VBO
 	delete vb;
 	delete ib;
-	glDeleteVertexArrays(1, &VertexArrayID);
-	glDeleteProgram(shader);
+	delete shader;
+	GLCall(glDeleteVertexArrays(1, &VertexArrayID));
+	
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
