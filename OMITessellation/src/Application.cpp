@@ -1,13 +1,15 @@
 #include <iostream>
+#include <windows.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <sstream>
-#include <windows.h>
 #include <vector>
 #include <limits>
 #include "Renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
+#include "VertexArray.h"
 #include "IndexBuffer.h"
 
 const static char* s_squareShapeFilePath = "json\\square.json";
@@ -391,16 +393,11 @@ int main(void)
 		2,3,0
 	};
 
-	unsigned int vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	// Create vertex buffer and copy data
+	VertexArray va;
 	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
-
-	// define vertex layout
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	va.AddBuffer(vb, layout);
 
 	// Create indices buffer and copy data
 	IndexBuffer* ib = new IndexBuffer(indices, 6);
@@ -409,22 +406,19 @@ int main(void)
 	ShaderSources source = ParseShader(s_dirPath + s_shaderPath);
 	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
 
-	int location = glGetUniformLocation(shader, "u_color");
-	if (location == -1)
-	{
-		return -1;
-	}
+	GLCall(int location = glGetUniformLocation(shader, "u_color"));
+	ASSERT(location != -1);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shader);
-		glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f);
+		GLCall(glUseProgram(shader));
+		GLCall(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
 
-		glBindVertexArray(vao);
 		ib->Bind();
+		va.Bind();
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
