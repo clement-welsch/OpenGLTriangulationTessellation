@@ -2,10 +2,6 @@
 #include <windows.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <limits>
 
 #include "IndexBuffer.h"
 #include "Renderer.h"
@@ -13,11 +9,13 @@
 #include "VertexBufferLayout.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Shape.h"
 
-const static char* s_squareShapeFilePath = "json\\square.json";
-const static char* s_cShapeFilePath = "json\\c.json";
-const static char* s_infiniteShapeFilePath = "json\\infinite.json";
-const static char* s_chaosShapeFilePath = "json\\chaos.json";
+const static std::string s_smallShapeFilePath = "res\\json\\small.json";
+const static std::string s_squareShapeFilePath = "res\\json\\square.json";
+const static std::string s_cShapeFilePath = "res\\json\\c.json";
+const static std::string s_infiniteShapeFilePath = "res\\json\\infinite.json";
+const static std::string s_chaosShapeFilePath = "res\\json\\chaos.json";
 
 const static std::string s_vertexShaderPath = "res\\shader\\Basic.vs";
 const static std::string s_fragmentShaderPath = "res\\shader\\Basic.fs";
@@ -49,145 +47,6 @@ void GetDesktopResolution(int& _horizontal, int& _vertical)
 	_vertical = desktop.bottom;
 }
 
-static void key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
-{
-	if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(_window, GL_TRUE);
-	}
-	else if (_key == GLFW_KEY_DOWN && _action == GLFW_PRESS)
-	{
-		s_ortho--;
-		s_ortho = max(0.0, s_ortho);
-	}
-	else if (_key == GLFW_KEY_UP && _action == GLFW_PRESS)
-	{
-		s_ortho++;
-		s_ortho = min(1000.0, s_ortho);
-	}
-}
-
-static void error_callback(int _error, const char* _description)
-{
-	fputs(_description, stderr);
-}
-
-/*int main()
-{
-	GLFWwindow* window;
-	glfwSetErrorCallback(error_callback);
-
-	if (!glfwInit())
-	{
-		std::cout << "OpenGL is not available on your device!" << std::endl;
-		return -1;
-	}
-
-	//Select JSON File
-	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
-	std::cout << "1-Square shape" << std::endl;
-	std::cout << "2-C shape" << std::endl;
-	std::cout << "3-infinite shape" << std::endl;
-	std::cout << "4-Chaos shape" << std::endl;
-	std::cout << "5-Quit" << std::endl;
-
-	std::string line;
-	std::getline(std::cin, line);
-
-	std::vector<float> tempListPoints;
-
-	switch (line[0])
-	{
-	case 49:
-		ReadJSON(s_squareShapeFilePath, tempListPoints);
-		break;
-	case 50:
-		ReadJSON(s_cShapeFilePath, tempListPoints);
-		break;
-	case 51:
-		ReadJSON(s_infiniteShapeFilePath, tempListPoints);
-		break;
-	case 52:
-		ReadJSON(s_chaosShapeFilePath, tempListPoints);
-		break;
-	default:
-		return 0;
-	}
-
-	if (tempListPoints.empty())
-	{
-		std::cout << "The file has not been found or is empty!" << std::endl;
-		return -1;
-	}
-
-	//create an array of points
-	const float* arrayPoints = &tempListPoints[0];
-	const unsigned int sizeArray = (int) tempListPoints.size();
-	tempListPoints.clear();
-
-	//Viewport Dimenssions
-	int width = 0;
-	int height = 0;
-	GetDesktopResolution(width, height);
-
-	window = glfwCreateWindow(width / 2, height / 2, "Draw Polygons", nullptr, nullptr);
-	if (window == nullptr)
-	{
-		std::cout << "Failed to create GLFW window!" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	glfwSetKeyCallback(window, key_callback);
-
-	if (glewInit() != GLEW_OK)
-	{
-		std::cout << "GLEW was not initialized properly!" << std::endl;
-		return -1;
-	}
-
-	//-------------------------------------------------
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, sizeArray * sizeof(float));
-	glBufferData(GL_ARRAY_BUFFER, sizeArray * sizeof(float), arrayPoints, GL_STATIC_DRAW);
-
-	//-------------------------------------------------
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
-	//unsigned int program = CreateShader(s_dirPath + s_vertexShaderPath, s_dirPath + s_fragmentShaderPath);
-	ShaderSources shaderSources = ParseShader(s_dirPath + s_shaderPath);
-	unsigned int program = CreateShader(shaderSources.vertexSource, shaderSources.fragmentSource);
-	if (program == 0)
-	{
-		std::cout << "Shaders creation or compiling error!" << std::endl;
-		return -1;
-	}
-
-	glUseProgram(program);
-
-	//Render
-	while (!glfwWindowShouldClose(window))
-	{
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, sizeArray);
-
-		// Swap buffers
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
-
-	glDeleteProgram(program);
-	glfwDestroyWindow(window);
-	glfwTerminate();
-
-	return 0;
-}*/
-
 int main(void)
 {
 	// Initialise GLFW
@@ -196,6 +55,52 @@ int main(void)
 		std::cout << "Failed to initialize GLEW" << std::endl;
 		return -1;
 	}
+
+	//---Shape
+
+	//Select JSON File
+	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
+	std::cout << "1-Small Square shape" << std::endl;
+	std::cout << "2-Big Square shape" << std::endl;
+	std::cout << "3-C shape" << std::endl;
+	std::cout << "4-infinite shape" << std::endl;
+	std::cout << "5-Chaos shape" << std::endl;
+	std::cout << "6-Quit" << std::endl;
+
+	std::string line;
+	std::getline(std::cin, line);
+	std::string fileNameSelected;
+
+	switch (line[0])
+	{
+		case 49:
+			fileNameSelected = s_smallShapeFilePath;
+			break;
+		case 50:
+			fileNameSelected = s_squareShapeFilePath;
+			break;
+		case 51:
+			fileNameSelected = s_cShapeFilePath;
+			break;
+		case 52:
+			fileNameSelected = s_infiniteShapeFilePath;
+			break;
+		case 53:
+			fileNameSelected = s_chaosShapeFilePath;
+			break;
+		default:
+			return 0;
+	}
+
+	Shape shape(s_dirPath + fileNameSelected);
+
+	if (shape.m_listVertex.empty())
+	{
+		std::cout << "The file has not been found or is empty!" << std::endl;
+		return -1;
+	}
+
+	//---Shape
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -235,7 +140,7 @@ int main(void)
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	float positions[] = {
+	/*float positions[] = {
 		-0.5f, -0.5f,
 		 0.5f,  -0.5f,
 		 0.5f, 0.5f,
@@ -245,12 +150,12 @@ int main(void)
 	unsigned int indices[] = {
 		0,1,2,
 		2,3,0
-	};
+	};*/
 
 	{
 		VertexArray va;
-		VertexBuffer vb (positions, 4 * 2 * sizeof(float));
-		IndexBuffer ib(indices, 6);
+		VertexBuffer vb (&shape.m_listVertex[0], shape.m_listVertex.size() * sizeof(float));
+		IndexBuffer ib(&shape.m_listIndex[0], shape.m_listIndex.size());
 
 		VertexBufferLayout layout;
 		layout.Push<float>(2);
