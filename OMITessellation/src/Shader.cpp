@@ -74,7 +74,7 @@ ShaderSources Shader::ParseShader(const std::string& _filePath)
 	return { ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str() };
 }
 
-const std::string& Shader::ParseShader(const std::string& _filePath, const ShaderType _shaderType)
+/*const std::string& Shader::ParseShader(const std::string& _filePath, const ShaderType _shaderType)
 {
 	std::string input;
 	std::cin >> input;
@@ -82,7 +82,7 @@ const std::string& Shader::ParseShader(const std::string& _filePath, const Shade
 	out << input;
 	out.close();
 	return input;
-}
+}*/
 
 unsigned int Shader::CompileShader(unsigned int _type, const std::string& _source)
 {
