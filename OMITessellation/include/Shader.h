@@ -19,6 +19,7 @@ public:
 
 private:
 	ShaderSources ParseShader(const std::string& _filePath);
+	const std::string& ParseShader(const std::string& _filePath, const ShaderType _shaderType);
 	unsigned int CompileShader(unsigned int _type, const std::string& _source);
 	unsigned int CreateShader(const std::string& _vertexShader, const std::string& _fragmentShader);
 

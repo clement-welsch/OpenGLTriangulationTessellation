@@ -5,6 +5,11 @@
 #include <iostream>
 #include "Renderer.h"
 
+enum class ShaderType
+{
+	NONE = -1, VERTEX = 0, FRAGMENT = 1
+};
+
 struct ShaderSources
 {
 	std::string vertexSource;
@@ -43,11 +48,6 @@ ShaderSources Shader::ParseShader(const std::string& _filePath)
 {
 	std::ifstream stream(_filePath);
 
-	enum class ShaderType
-	{
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
-	};
-
 	std::string line;
 	std::stringstream ss[2];
 	ShaderType type = ShaderType::NONE;
@@ -72,6 +72,16 @@ ShaderSources Shader::ParseShader(const std::string& _filePath)
 	}
 
 	return { ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str() };
+}
+
+const std::string& Shader::ParseShader(const std::string& _filePath, const ShaderType _shaderType)
+{
+	std::string input;
+	std::cin >> input;
+	std::ofstream out(_filePath);
+	out << input;
+	out.close();
+	return input;
 }
 
 unsigned int Shader::CompileShader(unsigned int _type, const std::string& _source)
