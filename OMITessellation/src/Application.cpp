@@ -19,6 +19,12 @@ const static char* s_cShapeFilePath = "json\\c.json";
 const static char* s_infiniteShapeFilePath = "json\\infinite.json";
 const static char* s_chaosShapeFilePath = "json\\chaos.json";
 
+const static std::string s_vertexShaderPath = "res\\shader\\Basic.vs";
+const static std::string s_fragmentShaderPath = "res\\shader\\Basic.fs";
+const static std::string s_shaderPath = "res\\shader\\Basic.shader";
+
+static double s_ortho = 10.0f;
+
 static std::string GetWorkingDir()
 {
 	char buf[MAX_PATH];
@@ -27,15 +33,6 @@ static std::string GetWorkingDir()
 }
 
 const static std::string s_dirPath = GetWorkingDir().c_str();
-const static std::string s_vertexShaderPath = "res\\shader\\Basic.vs";
-const static std::string s_fragmentShaderPath = "res\\shader\\Basic.fs";
-const static std::string s_shaderPath = "res\\shader\\Basic.shader";
-
-static double s_ortho = 10.0f;
-static float s_xMin = FLT_MAX;
-static float s_xMax = FLT_MIN;
-static float s_yMin = FLT_MAX;
-static float s_yMax = FLT_MIN;
 
 // Get the horizontal and vertical screen sizes in pixel
 void GetDesktopResolution(int& _horizontal, int& _vertical)
@@ -50,35 +47,6 @@ void GetDesktopResolution(int& _horizontal, int& _vertical)
 	// (horizontal, vertical)
 	_horizontal = desktop.right;
 	_vertical = desktop.bottom;
-}
-
-void ReadJSON(const char* _filePath, std::vector<float>& _listPoints)
-{
-	std::string fullpath = s_dirPath + std::string(_filePath);
-	std::ifstream infile(fullpath, std::ifstream::binary);
-
-	std::string line;
-	while (std::getline(infile, line))
-	{
-		std::istringstream iss(line);
-		float value;
-		if (iss >> value)
-		{
-			_listPoints.push_back(value);
-
-			//xMin-xMax-yMin-yMax
-			if (_listPoints.size() % 2 != 0)
-			{
-				s_xMin = min(s_xMin, value);
-				s_xMax = max(s_xMax, value);
-			}
-			else
-			{
-				s_yMin = min(s_yMin, value);
-				s_yMax = max(s_yMax, value);
-			}
-		}
-	}
 }
 
 static void key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
