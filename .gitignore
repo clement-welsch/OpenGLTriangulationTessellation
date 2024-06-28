@@ -36,3 +36,6 @@
 .vs/
 #*.vcxproj.filters
 #*.vcxproj.user
+
+# Others
+*.png
