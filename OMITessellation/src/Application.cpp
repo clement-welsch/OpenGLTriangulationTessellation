@@ -11,6 +11,9 @@
 #include "Shader.h"
 #include "Shape.h"
 
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+
 const static std::string s_smallShapeFilePath = "res\\json\\small.json";
 const static std::string s_squareShapeFilePath = "res\\json\\square.json";
 const static std::string s_cShapeFilePath = "res\\json\\c.json";
@@ -161,9 +164,13 @@ int main(void)
 		layout.Push<float>(2);
 		va.AddBuffer(vb, layout);
 
+		//matrices transformation
+		glm::mat4 proj = glm::ortho(-2.0, 2.0, -1.5, 1.5, -1.0, 1.0);
+
 		//Shader setup
 		Shader shader(s_dirPath + s_shaderPath);
-		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+		shader.SetUniformMat4f("u_MVP", proj);
 		
 		Renderer renderer;
 
@@ -173,7 +180,7 @@ int main(void)
 			renderer.Clear();
 			
 			shader.Bind();
-			shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+			shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 			renderer.Draw(va, ib, shader);
 
