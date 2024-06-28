@@ -29,11 +29,6 @@
     <ClCompile Include="src\VertexBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\Basic.fs" />
-    <None Include="shader\Basic.shader" />
-    <None Include="shader\Basic.vs" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\IndexBuffer.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Shader.h" />
@@ -41,6 +36,11 @@
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\VertexBuffer.h" />
     <ClInclude Include="include\VertexBufferLayout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shader\Basic.frag" />
+    <None Include="res\shader\Basic.shader" />
+    <None Include="res\shader\Basic.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
