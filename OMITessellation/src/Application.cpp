@@ -17,8 +17,8 @@ const static std::string s_cShapeFilePath = "res\\json\\c.json";
 const static std::string s_infiniteShapeFilePath = "res\\json\\infinite.json";
 const static std::string s_chaosShapeFilePath = "res\\json\\chaos.json";
 
-const static std::string s_vertexShaderPath = "res\\shader\\Basic.vs";
-const static std::string s_fragmentShaderPath = "res\\shader\\Basic.fs";
+const static std::string s_vertexShaderPath = "res\\shader\\Basic.vert";
+const static std::string s_fragmentShaderPath = "res\\shader\\Basic.frag";
 const static std::string s_shaderPath = "res\\shader\\Basic.shader";
 
 static double s_ortho = 10.0f;
@@ -57,9 +57,10 @@ int main(void)
 	}
 
 	//---Shape
+	std::string fileNameSelected;
 
 	//Select JSON File
-	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
+	/*std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
 	std::cout << "1-Small Square shape" << std::endl;
 	std::cout << "2-Big Square shape" << std::endl;
 	std::cout << "3-C shape" << std::endl;
@@ -69,7 +70,6 @@ int main(void)
 
 	std::string line;
 	std::getline(std::cin, line);
-	std::string fileNameSelected;
 
 	switch (line[0])
 	{
@@ -90,8 +90,9 @@ int main(void)
 			break;
 		default:
 			return 0;
-	}
+	}*/
 
+	fileNameSelected = s_smallShapeFilePath;
 	Shape shape(s_dirPath + fileNameSelected);
 
 	if (shape.m_listVertex.empty())
