@@ -16,20 +16,36 @@ Shape::Shape(const std::string& _filePath)
 		{
 			m_listVertex.push_back(value);
 
-			//xMin-xMax-yMin-yMax
-			if (m_listVertex.size() % 2 != 0)
+			if (m_listVertex.size() % 2 == 0)
 			{
-			}
-			else
-			{
-				m_listIndex.push_back(nbVertex++);
-
-				if (nbVertex % 2 == 0)
-				{
-					m_listIndex.push_back(nbVertex);
-				}
+				nbVertex++;
 			}
 		}
 	}
-	m_listIndex[m_listIndex.size()-1] = 0;
+
+	//Auto indexing - GL_TRIANGLES
+	for (int i = 0, j = nbVertex-1; i < (nbVertex-1) /2; i++, j--)
+	{
+		{
+			//T1
+			const int p0 = i;
+			const int p1 = i + 1;
+			const int p2 = j;
+
+			m_listIndex.push_back(p0);
+			m_listIndex.push_back(p1);
+			m_listIndex.push_back(p2);
+		}
+
+		{
+			//T2
+			const int p0 = i + 1;
+			const int p1 = j - 1;
+			const int p2 = j;
+
+			m_listIndex.push_back(p0);
+			m_listIndex.push_back(p1);
+			m_listIndex.push_back(p2);
+		}
+	}
 }
