@@ -38,9 +38,7 @@
     <ClInclude Include="include\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\Basic.frag" />
     <None Include="res\shader\Basic.shader" />
-    <None Include="res\shader\Basic.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

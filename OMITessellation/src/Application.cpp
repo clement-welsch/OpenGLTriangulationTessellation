@@ -63,7 +63,7 @@ int main(void)
 	std::string fileNameSelected;
 
 	//Select JSON File
-	/*std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
+	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
 	std::cout << "1-Small Square shape" << std::endl;
 	std::cout << "2-Big Square shape" << std::endl;
 	std::cout << "3-C shape" << std::endl;
@@ -93,9 +93,9 @@ int main(void)
 			break;
 		default:
 			return 0;
-	}*/
+	}
 
-	fileNameSelected = s_smallShapeFilePath;
+	//fileNameSelected = s_squareShapeFilePath;
 	Shape shape(s_dirPath + fileNameSelected);
 
 	if (shape.m_listVertex.empty())
@@ -104,7 +104,7 @@ int main(void)
 		return -1;
 	}
 
-	//---Shape
+	//Setup GLFW
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -166,12 +166,12 @@ int main(void)
 		va.AddBuffer(vb, layout);
 
 		//matrices transformation
-		glm::mat4 proj = glm::ortho(-2.0, 2.0, -1.5, 1.5, -1.0, 1.0);
+		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
 
 		//Shader setup
 		Shader shader(s_dirPath + s_shaderPath);
-		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-		shader.SetUniformMat4f("u_MVP", proj);
+		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		shader.SetUniformMat4f("u_mvp", proj);
 		
 		Renderer renderer;
 
@@ -181,7 +181,7 @@ int main(void)
 			renderer.Clear();
 			
 			shader.Bind();
-			shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+			shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 			renderer.Draw(va, ib, shader);
 
