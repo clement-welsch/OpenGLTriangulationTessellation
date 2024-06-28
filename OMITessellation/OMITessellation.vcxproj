@@ -38,9 +38,7 @@
     <ClInclude Include="include\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\Basic.frag" />
     <None Include="res\shader\Basic.shader" />
-    <None Include="res\shader\Basic.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -128,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)api\glfw-3.4\include;$(SolutionDir)api\GLEW\include;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)api\glfw-3.4\include;$(SolutionDir)api\GLEW\include;$(SolutionDir)include;$(SolutionDir)api\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,7 +143,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)api\glfw-3.4\include;$(SolutionDir)api\GLEW\include;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)api\glfw-3.4\include;$(SolutionDir)api\GLEW\include;$(SolutionDir)include;$(SolutionDir)api\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -19,13 +19,9 @@ Shape::Shape(const std::string& _filePath)
 			//xMin-xMax-yMin-yMax
 			if (m_listVertex.size() % 2 != 0)
 			{
-				m_xMin = std::min(m_xMin, value);
-				m_xMax = std::max(m_xMax, value);
 			}
 			else
 			{
-				m_yMin = std::min(m_yMin, value);
-				m_yMax = std::max(m_yMax, value);
 				m_listIndex.push_back(nbVertex++);
 
 				if (nbVertex % 2 == 0)
