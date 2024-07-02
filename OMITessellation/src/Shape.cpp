@@ -24,7 +24,7 @@ Shape::Shape(const std::string& _filePath)
 	}
 
 	//Auto indexing - GL_TRIANGLES
-	for (int i = 0, j = nbVertex-1; i < (nbVertex-1) /2; i++, j--)
+	/*for (int i = 0, j = nbVertex-1; i < (nbVertex-1) /2; i++, j--)
 	{
 		{
 			//T1
@@ -47,5 +47,11 @@ Shape::Shape(const std::string& _filePath)
 			m_listIndex.push_back(p1);
 			m_listIndex.push_back(p2);
 		}
+	}*/
+
+	for (int i = 0; i < nbVertex; i++)
+	{
+		m_listIndex.push_back(i);
 	}
+	m_listIndex.push_back(0);
 }
