@@ -5,21 +5,15 @@
 #include <iostream>
 #include "Renderer.h"
 
-enum class ShaderType
-{
-	NONE = -1, VERTEX = 0, FRAGMENT = 1
-};
+const static char* s_vertexShaderPath = "res/shader/vertex.vert";
+const static char* s_tessControllerShaderPath = "res/shader/tessellation.tesc";
+const static char* s_tessEvaluationShaderPath = "res/shader/tessellation.tese";
+const static char* s_fragmentShaderPath = "res/shader/fragment.frag";
+//const static std::string s_shaderPath = "res/shader/Basic.shader";
 
-struct ShaderSources
+Shader::Shader() : m_rendererID (0)
 {
-	std::string vertexSource;
-	std::string fragmentSource;
-};
-
-Shader::Shader(const std::string& _filePath) : m_filePath (_filePath), m_rendererID (0)
-{
-	ShaderSources source = ParseShader(m_filePath);
-	m_rendererID = CreateShader(source.vertexSource, source.fragmentSource);
+	m_rendererID = CreateShader();
 	GLCall(glUseProgram(m_rendererID));
 }
 
@@ -48,34 +42,20 @@ void Shader::SetUniformMat4f(const std::string& _name, const glm::mat4& _matrix)
 	GLCall(glUniformMatrix4fv(GetUniformLocation(_name), 1, GL_FALSE, &_matrix[0][0]));
 }
 
-ShaderSources Shader::ParseShader(const std::string& _filePath)
+std::string Shader::readText(const char* textFile)
 {
-	std::ifstream stream(_filePath);
-
-	std::string line;
-	std::stringstream ss[2];
-	ShaderType type = ShaderType::NONE;
-
-	while (std::getline(stream, line))
+	std::FILE* fp = std::fopen(textFile, "rb");
+	if (fp)
 	{
-		if (line.find("#shader") != std::string::npos)
-		{
-			if (line.find("vertex") != std::string::npos)
-			{
-				type = ShaderType::VERTEX;
-			}
-			else if (line.find("fragment") != std::string::npos)
-			{
-				type = ShaderType::FRAGMENT;
-			}
-		}
-		else
-		{
-			ss[(int)type] << line << '\n';
-		}
+		std::string contents;
+		std::fseek(fp, 0, SEEK_END);
+		contents.resize(std::ftell(fp));
+		std::rewind(fp);
+		std::fread(&contents[0], 1, contents.size(), fp);
+		std::fclose(fp);
+		return(contents);
 	}
-
-	return { ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str() };
+	throw(errno);
 }
 
 unsigned int Shader::CompileShader(unsigned int _type, const std::string& _source)
@@ -121,14 +101,23 @@ unsigned int Shader::CompileShader(unsigned int _type, const std::string& _sourc
 	return id;
 }
 
-unsigned int Shader::CreateShader(const std::string& _vertexShader, const std::string& _fragmentShader)
+unsigned int Shader::CreateShader()
 {
+	//Load Files
+	std::string vertexCode = readText(s_vertexShaderPath);
+	std::string tesControlCode = readText(s_tessControllerShaderPath);
+	std::string tesEvalCode = readText(s_tessEvaluationShaderPath);
+	std::string fragmentCode = readText(s_fragmentShaderPath);
 	// create a shader program
 	unsigned int program = glCreateProgram();
-	unsigned int vs = CompileShader(GL_VERTEX_SHADER, _vertexShader);
-	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, _fragmentShader);
+	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexCode);
+	unsigned int tesc = CompileShader(GL_TESS_CONTROL_SHADER, tesControlCode);
+	unsigned int tese = CompileShader(GL_TESS_EVALUATION_SHADER, tesEvalCode);
+	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentCode);
 
 	GLCall(glAttachShader(program, vs));
+	GLCall(glAttachShader(program, tesc));
+	GLCall(glAttachShader(program, tese));
 	GLCall(glAttachShader(program, fs));
 
 	GLCall(glLinkProgram(program));
@@ -149,6 +138,8 @@ unsigned int Shader::CreateShader(const std::string& _vertexShader, const std::s
 	GLCall(glValidateProgram(program));
 
 	GLCall(glDeleteShader(vs));
+	GLCall(glDeleteShader(tesc));
+	GLCall(glDeleteShader(tese));
 	GLCall(glDeleteShader(fs));
 
 	return program;

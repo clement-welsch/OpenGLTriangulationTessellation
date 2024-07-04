@@ -47,15 +47,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\Basic.fs">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
-    <None Include="shader\Basic.shader">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
-    <None Include="shader\Basic.vs">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
+    <None Include="res\shader\Basic.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\IndexBuffer.h">

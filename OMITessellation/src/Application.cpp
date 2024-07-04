@@ -20,10 +20,6 @@ const static std::string s_cShapeFilePath = "res/json/c.json";
 const static std::string s_infiniteShapeFilePath = "res/json/infinite.json";
 const static std::string s_chaosShapeFilePath = "res/json/chaos.json";
 
-const static std::string s_vertexShaderPath = "res/shader/Basic.vert";
-const static std::string s_fragmentShaderPath = "res/shader/Basic.frag";
-const static std::string s_shaderPath = "res/shader/Basic.shader";
-
 static double s_ortho = 10.0f;
 
 // Get the horizontal and vertical screen sizes in pixel
@@ -160,7 +156,7 @@ int main(void)
 		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
 
 		//Shader setup
-		Shader shader(s_shaderPath);
+		Shader shader;
 		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 		shader.SetUniformMat4f("u_mvp", proj);
 		

@@ -3,12 +3,11 @@
 #include <unordered_map>
 #include "glm.hpp"
 
-struct ShaderSources;
 
 class Shader
 {
 public:
-	Shader(const std::string& _filePath);
+	Shader();
 	~Shader();
 
 	void Bind() const;
@@ -20,9 +19,11 @@ public:
 	unsigned int GetRendererID() const { return m_rendererID; }
 
 private:
-	ShaderSources ParseShader(const std::string& _filePath);
+	std::string readText(const char* textFile);
 	unsigned int CompileShader(unsigned int _type, const std::string& _source);
-	unsigned int CreateShader(const std::string& _vertexShader, const std::string& _fragmentShader);
+	unsigned int CreateShader();
+
+
 
 	int GetUniformLocation(const std::string& _name);
 
