@@ -70,14 +70,14 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, const Shade
     }
 
     {
-        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
-        GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+        /*GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
+        GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));*/
     }
 
     {
 
-        /*GLCall(glPointSize(10.0f));
+        GLCall(glPointSize(10.0f));
         GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-        GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));*/
+        GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
     }
 }
