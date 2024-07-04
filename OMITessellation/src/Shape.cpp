@@ -1,7 +1,6 @@
 #include "Shape.h"
 #include <fstream>
 #include <sstream>
-#include "glm.hpp"
 
 Shape::Shape(const std::string& _filePath)
 {
@@ -75,31 +74,6 @@ Shape::Shape(const std::string& _filePath)
 		m_listIndex.push_back(i);
 	}
 	m_listIndex.push_back(0);*/
-}
-
-void Shape::genNonSymPlaneUniform(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, int div)
-{
-
-	/*glm::vec3 dir03 = (v3 - v0) / float(div);
-	glm::vec3 dir12 = (v2 - v1) / float(div);
-
-	// dir2 and dir3
-	for (int i = 0; i < div + 1; i++)
-	{
-		// dir1
-		for (int j = 0; j < div + 1; j++)
-		{
-			glm::vec3 acrossj = ((v1 + i * dir12.xyz) - (v0 + i * dir03)) / float(div);
-			glm::vec3 crntVec = v0 + i * dir03 + j * acrossj;
-			// Position
-			m_listVertex.push_back(crntVec.x);
-			m_listVertex.push_back(crntVec.y);
-			m_listVertex.push_back(crntVec.z);
-			// Tex UV
-			m_listVertex.push_back(float(j) / div);
-			m_listVertex.push_back(float(i) / div);
-		}
-	}*/
 }
 
 void Shape::genPlaneIndTes(const unsigned int _div)
