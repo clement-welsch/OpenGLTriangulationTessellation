@@ -7,6 +7,7 @@ Shape::Shape(const std::string& _filePath)
 	unsigned int nbVertex = 0;
 	std::ifstream infile(_filePath, std::ifstream::binary);
 
+	bool isVertex = true;
 	std::string line;
 	while (std::getline(infile, line))
 	{
@@ -22,6 +23,7 @@ Shape::Shape(const std::string& _filePath)
 			}
 		}
 	}
+	genPlaneIndTes(4);
 
 	//Auto indexing - GL_TRIANGLES
 	/*for (int i = 0, j = nbVertex-1; i < (nbVertex-1) /2; i++, j--)
@@ -49,9 +51,24 @@ Shape::Shape(const std::string& _filePath)
 		}
 	}*/
 
-	for (int i = 0; i < nbVertex; i++)
+	/*for (int i = 0; i < nbVertex; i++)
 	{
 		m_listIndex.push_back(i);
 	}
-	m_listIndex.push_back(0);
+	m_listIndex.push_back(0);*/
+}
+
+void Shape::genPlaneIndTes(const unsigned int _div)
+{
+	for (int row = 0; row < _div; row++)
+	{
+		for (int col = 0; col < _div; col++)
+		{
+			int index = row * (_div + 1) + col;				// 3___2
+			m_listIndex.push_back(index);					//     |
+			m_listIndex.push_back(index + 1);				//     |
+			m_listIndex.push_back(index + (_div + 1) + 1);	//  ___|
+			m_listIndex.push_back(index + (_div + 1));		// 0   1
+		}
+	}
 }

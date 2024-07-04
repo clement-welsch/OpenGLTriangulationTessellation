@@ -14,26 +14,17 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 
-const static std::string s_smallShapeFilePath = "res\\json\\small.json";
-const static std::string s_squareShapeFilePath = "res\\json\\square.json";
-const static std::string s_cShapeFilePath = "res\\json\\c.json";
-const static std::string s_infiniteShapeFilePath = "res\\json\\infinite.json";
-const static std::string s_chaosShapeFilePath = "res\\json\\chaos.json";
+const static std::string s_smallShapeFilePath = "res/json/small.json";
+const static std::string s_squareShapeFilePath = "res/json/square.json";
+const static std::string s_cShapeFilePath = "res/json/c.json";
+const static std::string s_infiniteShapeFilePath = "res/json/infinite.json";
+const static std::string s_chaosShapeFilePath = "res/json/chaos.json";
 
-const static std::string s_vertexShaderPath = "res\\shader\\Basic.vert";
-const static std::string s_fragmentShaderPath = "res\\shader\\Basic.frag";
-const static std::string s_shaderPath = "res\\shader\\Basic.shader";
+const static std::string s_vertexShaderPath = "res/shader/Basic.vert";
+const static std::string s_fragmentShaderPath = "res/shader/Basic.frag";
+const static std::string s_shaderPath = "res/shader/Basic.shader";
 
 static double s_ortho = 10.0f;
-
-static std::string GetWorkingDir()
-{
-	char buf[MAX_PATH];
-	GetCurrentDirectoryA(256, buf);
-	return std::string(buf) + '\\';
-}
-
-const static std::string s_dirPath = GetWorkingDir().c_str();
 
 // Get the horizontal and vertical screen sizes in pixel
 void GetDesktopResolution(int& _horizontal, int& _vertical)
@@ -96,7 +87,7 @@ int main(void)
 	}
 
 	//fileNameSelected = s_squareShapeFilePath;
-	Shape shape(s_dirPath + fileNameSelected);
+	Shape shape(fileNameSelected);
 
 	if (shape.m_listVertex.empty())
 	{
@@ -108,7 +99,7 @@ int main(void)
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -169,11 +160,14 @@ int main(void)
 		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
 
 		//Shader setup
-		Shader shader(s_dirPath + s_shaderPath);
+		Shader shader(s_shaderPath);
 		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 		shader.SetUniformMat4f("u_mvp", proj);
 		
 		Renderer renderer;
+
+
+		glViewport(0, 0, 720, 720);
 
 		while (!glfwWindowShouldClose(window))
 		{
