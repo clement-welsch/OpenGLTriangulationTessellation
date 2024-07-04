@@ -11,36 +11,18 @@ Shape::Shape(const std::string& _filePath)
 	std::string line;
 	while (std::getline(infile, line))
 	{
-		if (line.find("#index") != std::string::npos)
+		std::istringstream iss(line);
+		float value;
+		if (iss >> value)
 		{
-			isVertex = false;
-		}
+			m_listVertex.push_back(value);
 
-		if (isVertex)
-		{
-			std::istringstream iss(line);
-			float value;
-			if (iss >> value)
+			if (m_listVertex.size() % 2 == 0)
 			{
-				m_listVertex.push_back(value);
-
-				if (m_listVertex.size() % 2 == 0)
-				{
-					nbVertex++;
-				}
-			}
-		}
-		else
-		{
-			std::istringstream iss(line);
-			int value;
-			if (iss >> value)
-			{
-				m_listIndex.push_back(value);
+				nbVertex++;
 			}
 		}
 	}
-	m_listIndex.clear();
 	genPlaneIndTes(4);
 
 	//Auto indexing - GL_TRIANGLES
