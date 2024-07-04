@@ -42,7 +42,7 @@ void Shader::SetUniformMat4f(const std::string& _name, const glm::mat4& _matrix)
 	GLCall(glUniformMatrix4fv(GetUniformLocation(_name), 1, GL_FALSE, &_matrix[0][0]));
 }
 
-std::string Shader::readText(const char* textFile)
+std::string Shader::ReadText(const char* textFile)
 {
 	std::FILE* fp = std::fopen(textFile, "rb");
 	if (fp)
@@ -104,10 +104,10 @@ unsigned int Shader::CompileShader(unsigned int _type, const std::string& _sourc
 unsigned int Shader::CreateShader()
 {
 	//Load Files
-	std::string vertexCode = readText(s_vertexShaderPath);
-	std::string tesControlCode = readText(s_tessControllerShaderPath);
-	std::string tesEvalCode = readText(s_tessEvaluationShaderPath);
-	std::string fragmentCode = readText(s_fragmentShaderPath);
+	std::string vertexCode = ReadText(s_vertexShaderPath);
+	std::string tesControlCode = ReadText(s_tessControllerShaderPath);
+	std::string tesEvalCode = ReadText(s_tessEvaluationShaderPath);
+	std::string fragmentCode = ReadText(s_fragmentShaderPath);
 	// create a shader program
 	unsigned int program = glCreateProgram();
 	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexCode);
@@ -116,8 +116,8 @@ unsigned int Shader::CreateShader()
 	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentCode);
 
 	GLCall(glAttachShader(program, vs));
-	GLCall(glAttachShader(program, tesc));
-	GLCall(glAttachShader(program, tese));
+	//GLCall(glAttachShader(program, tesc));
+	//GLCall(glAttachShader(program, tese));
 	GLCall(glAttachShader(program, fs));
 
 	GLCall(glLinkProgram(program));

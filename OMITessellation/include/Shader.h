@@ -19,7 +19,7 @@ public:
 	unsigned int GetRendererID() const { return m_rendererID; }
 
 private:
-	std::string readText(const char* textFile);
+	std::string ReadText(const char* textFile);
 	unsigned int CompileShader(unsigned int _type, const std::string& _source);
 	unsigned int CreateShader();
 
