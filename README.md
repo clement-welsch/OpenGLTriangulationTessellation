@@ -73,3 +73,15 @@ This is an open ended assignment so feel free to be creative. Here are a few of 
 ---
 
 We don’t really expect any code but you are free to add it if you wish.
+
+### src ###
+####OpenGL Project Setup####
+https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
+
+####Delaunay####
+https://github.com/jbegaint/delaunay-cpp
+
+####Tesselation####
+https://www.youtube.com/watch?v=21gfE-zUym8
+https://www.youtube.com/watch?v=OqRMNrvu6TE
+https://learnopengl.com/Guest-Articles/2021/Tessellation/Tessellation
