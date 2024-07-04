@@ -45,6 +45,7 @@ bool GLCheckError()
 
 void Renderer::Clear() const
 {
+    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -54,8 +55,29 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, const Shade
     _ib.Bind();
     _va.Bind();
 
-    GLCall(glPointSize(10.0f));
+    bool wireframe = true;
 
-    GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-    GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+    if (wireframe)
+    {
+        GLCall(glPointSize(10.0f));
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDisable(GL_CULL_FACE);
+    }
+    else
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glEnable(GL_CULL_FACE);
+    }
+
+    {
+        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
+        GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+    }
+
+    {
+
+        /*GLCall(glPointSize(10.0f));
+        GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+        GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));*/
+    }
 }
