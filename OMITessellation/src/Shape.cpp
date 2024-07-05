@@ -17,10 +17,13 @@ Shape::Shape(const std::string& _filePath)
 		{
 			m_listVertex.push_back(value);
 
-			
+			if (m_listVertex.size() % 2 == 0)
+			{
+				m_listIndex.push_back(m_listIndex.size());
+			}
 		}
 	}
-	DelaunayTriangulation();
+	//DelaunayTriangulation();
 }
 
 const unsigned int Shape::GetIndex(std::vector<delaunay::Point<float>>& _listDelaunayPoints, delaunay::Point<float> _p)
