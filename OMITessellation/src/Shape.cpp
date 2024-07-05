@@ -26,13 +26,9 @@ Shape::Shape(const std::string& _filePath)
 const unsigned int Shape::GetIndex(std::vector<delaunay::Point<float>>& _listDelaunayPoints, delaunay::Point<float> _p)
 {
 	auto it = find(_listDelaunayPoints.begin(), _listDelaunayPoints.end(), _p);
-
-	// If element was found 
+ 
 	if (it != _listDelaunayPoints.end())
 	{
-
-		// calculating the index 
-		// of K 
 		const unsigned int index = it - _listDelaunayPoints.begin();
 		return index;
 	}
