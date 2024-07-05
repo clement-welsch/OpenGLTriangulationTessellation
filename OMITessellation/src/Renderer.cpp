@@ -55,25 +55,27 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
     _ib.Bind();
     _va.Bind();
 
-    bool wireframe = true;
+    const bool showPatches = true;
 
-    if (wireframe)
+    if(showPatches)
     {
-        GLCall(glPointSize(10.0f));
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glDisable(GL_CULL_FACE);
+        bool wireframe = true;
+        if (wireframe)
+        {
+            GLCall(glPointSize(10.0f));
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glDisable(GL_CULL_FACE);
+        }
+        else
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glEnable(GL_CULL_FACE);
+        }
+        _shader.SetUniform4f("u_color", 1.0f, 1.0f, 1.0f, 1.0f);
+        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
+        GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
     }
     else
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glEnable(GL_CULL_FACE);
-    }
-
-    {
-        /*GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
-        GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));*/
-    }
-
     {
         _shader.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
         GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
@@ -82,6 +84,5 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
         GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
         _shader.SetUniform4f("u_color", 0.0f, 0.0f, 1.0f, 1.0f);
         GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-        
     }
 }
