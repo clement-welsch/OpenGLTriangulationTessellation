@@ -157,22 +157,14 @@ int main(void)
 
 		//Shader setup
 		Shader shader;
-		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 		shader.SetUniformMat4f("u_mvp", proj);
-		
 		Renderer renderer;
-
-
-		glViewport(0, 0, 720, 720);
 
 		while (!glfwWindowShouldClose(window))
 		{
 			// Clear the screen
 			renderer.Clear();
-			
 			shader.Bind();
-			shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
-
 			renderer.Draw(va, ib, shader);
 
 			// Swap buffers
