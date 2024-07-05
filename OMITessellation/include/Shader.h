@@ -22,9 +22,6 @@ private:
 	std::string ReadText(const char* textFile);
 	unsigned int CompileShader(unsigned int _type, const std::string& _source);
 	unsigned int CreateShader();
-
-
-
 	int GetUniformLocation(const std::string& _name);
 
 	unsigned int m_rendererID;
