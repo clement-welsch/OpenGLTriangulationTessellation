@@ -8,7 +8,6 @@ out vec2 uvs;
 
 void main()
 {
-	//gl_Position = vec4(pos.xyz, 1.0);
 	gl_Position = pos * u_mvp;
 	uvs = texCoords;
 }
