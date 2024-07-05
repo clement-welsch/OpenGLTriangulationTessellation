@@ -39,6 +39,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\Basic.shader" />
+    <None Include="res\shader\fragment.frag" />
+    <None Include="res\shader\tessellation.tesc" />
+    <None Include="res\shader\tessellation.tese" />
+    <None Include="res\shader\vertex.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
