@@ -85,5 +85,8 @@
     <None Include="res\shader\vertex.vert">
       <Filter>Resource Files\res\shader</Filter>
     </None>
+    <None Include="res\shader\geometry.geom">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

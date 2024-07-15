@@ -154,9 +154,13 @@ int main(void)
 
 		//matrices transformation
 		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
 
 		//Shader setup
 		Shader shader;
+		shader.SetUniformMat4f("u_model", model);
+		shader.SetUniformMat4f("u_view", view);
 		shader.SetUniformMat4f("u_mvp", proj);
 		Renderer renderer;
 

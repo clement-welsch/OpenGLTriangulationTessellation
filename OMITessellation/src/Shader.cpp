@@ -8,8 +8,8 @@
 const static char* s_vertexShaderPath = "res/shader/vertex.vert";
 const static char* s_tessControllerShaderPath = "res/shader/tessellation.tesc";
 const static char* s_tessEvaluationShaderPath = "res/shader/tessellation.tese";
+const static char* s_geometryShaderPath = "res/shader/geometry.geom";
 const static char* s_fragmentShaderPath = "res/shader/fragment.frag";
-//const static std::string s_shaderPath = "res/shader/Basic.shader";
 
 Shader::Shader() : m_rendererID (0)
 {
@@ -88,6 +88,9 @@ unsigned int Shader::CompileShader(unsigned int _type, const std::string& _sourc
 		case GL_COMPUTE_SHADER:
 			std::cout << "Compute";
 			break;
+		case GL_GEOMETRY_SHADER:
+			std::cout << "Geometry";
+			break;
 		case GL_FRAGMENT_SHADER:
 			std::cout << "Fragment";
 			break;
@@ -107,17 +110,20 @@ unsigned int Shader::CreateShader()
 	std::string vertexCode = ReadText(s_vertexShaderPath);
 	std::string tesControlCode = ReadText(s_tessControllerShaderPath);
 	std::string tesEvalCode = ReadText(s_tessEvaluationShaderPath);
+	std::string geometryCode = ReadText(s_geometryShaderPath);
 	std::string fragmentCode = ReadText(s_fragmentShaderPath);
 	// create a shader program
 	unsigned int program = glCreateProgram();
 	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexCode);
 	unsigned int tesc = CompileShader(GL_TESS_CONTROL_SHADER, tesControlCode);
 	unsigned int tese = CompileShader(GL_TESS_EVALUATION_SHADER, tesEvalCode);
+	unsigned int geos = CompileShader(GL_GEOMETRY_SHADER, geometryCode);
 	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentCode);
 
 	GLCall(glAttachShader(program, vs));
 	GLCall(glAttachShader(program, tesc));
 	GLCall(glAttachShader(program, tese));
+	GLCall(glAttachShader(program, geos));
 	GLCall(glAttachShader(program, fs));
 
 	GLCall(glLinkProgram(program));
@@ -140,6 +146,7 @@ unsigned int Shader::CreateShader()
 	GLCall(glDeleteShader(vs));
 	GLCall(glDeleteShader(tesc));
 	GLCall(glDeleteShader(tese));
+	GLCall(glDeleteShader(geos));
 	GLCall(glDeleteShader(fs));
 
 	return program;
