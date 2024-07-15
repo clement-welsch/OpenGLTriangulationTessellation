@@ -3,6 +3,21 @@
 #include <string>
 #include "delaunay.hpp"
 
+struct Patch
+{
+	Patch() {}
+	void AddIndex(int _newIndex)
+	{
+		if (std::find(m_listIndex.begin(), m_listIndex.end(), _newIndex) == m_listIndex.end())
+		{
+			m_listIndex.push_back(_newIndex);
+			std::sort(m_listIndex.begin(), m_listIndex.end());
+		}
+	}
+
+	std::vector<int> m_listIndex;
+};
+
 struct Shape
 {
 	Shape(const std::string& _filePath);
