@@ -76,18 +76,18 @@ We don’t really expect any code but you are free to add it if you wish.
 
 ### src ###
 ####OpenGL Project Setup####
-https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
++ https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
 
 ####Delaunay####
-https://github.com/jbegaint/delaunay-cpp
-https://github.com/delfrrr/delaunator-cpp
-https://github.com/senhorsolar/concavehull
-https://mapbox.github.io/delaunator/
++ https://github.com/jbegaint/delaunay-cpp
++ https://github.com/delfrrr/delaunator-cpp
++ https://github.com/senhorsolar/concavehull
++ https://mapbox.github.io/delaunator/
 
 ####Tesselation####
-https://www.youtube.com/watch?v=21gfE-zUym8
-https://www.youtube.com/watch?v=OqRMNrvu6TE
-https://learnopengl.com/Guest-Articles/2021/Tessellation/Tessellation
-https://github.com/sp4cerat/OpenGL-Tessellation-Shader-Tutorial-C-/tree/master
++ https://www.youtube.com/watch?v=21gfE-zUym8
++ https://www.youtube.com/watch?v=OqRMNrvu6TE
++ https://learnopengl.com/Guest-Articles/2021/Tessellation/Tessellation
++ https://github.com/sp4cerat/OpenGL-Tessellation-Shader-Tutorial-C-/tree/master
 
-https://gamedev.stackexchange.com/questions/153391/opengl-tessellation-shader-not-working
++ https://gamedev.stackexchange.com/questions/153391/opengl-tessellation-shader-not-working
