@@ -20,10 +20,6 @@ const static std::string s_cShapeFilePath = "res/json/c.json";
 const static std::string s_infiniteShapeFilePath = "res/json/infinite.json";
 const static std::string s_chaosShapeFilePath = "res/json/chaos.json";
 
-const static std::string s_vertexShaderPath = "res/shader/Basic.vert";
-const static std::string s_fragmentShaderPath = "res/shader/Basic.frag";
-const static std::string s_shaderPath = "res/shader/Basic.shader";
-
 static double s_ortho = 10.0f;
 
 // Get the horizontal and vertical screen sizes in pixel
@@ -101,7 +97,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 	// Open a window and create its OpenGL context
 	GLFWwindow* window = glfwCreateWindow(1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
@@ -158,25 +154,21 @@ int main(void)
 
 		//matrices transformation
 		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
 
 		//Shader setup
-		Shader shader(s_shaderPath);
-		shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+		Shader shader;
+		shader.SetUniformMat4f("u_model", model);
+		shader.SetUniformMat4f("u_view", view);
 		shader.SetUniformMat4f("u_mvp", proj);
-		
 		Renderer renderer;
-
-
-		glViewport(0, 0, 720, 720);
 
 		while (!glfwWindowShouldClose(window))
 		{
 			// Clear the screen
 			renderer.Clear();
-			
 			shader.Bind();
-			shader.SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
-
 			renderer.Draw(va, ib, shader);
 
 			// Swap buffers

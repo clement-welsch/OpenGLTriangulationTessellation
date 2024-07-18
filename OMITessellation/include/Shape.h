@@ -9,7 +9,4 @@ struct Shape
 
 	std::vector<float> m_listVertex;
 	std::vector<int> m_listIndex;
-
-private:
-	void genPlaneIndTes(const unsigned int _div);
 };

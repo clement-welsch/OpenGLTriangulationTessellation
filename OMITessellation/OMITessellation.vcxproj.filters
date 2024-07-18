@@ -47,17 +47,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\Basic.fs">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
-    <None Include="shader\Basic.shader">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
-    <None Include="shader\Basic.vs">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\IndexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -79,5 +68,25 @@
     <ClInclude Include="include\Shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shader\Basic.shader">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
+    <None Include="res\shader\fragment.frag">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
+    <None Include="res\shader\tessellation.tesc">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
+    <None Include="res\shader\tessellation.tese">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
+    <None Include="res\shader\vertex.vert">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
+    <None Include="res\shader\geometry.geom">
+      <Filter>Resource Files\res\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
