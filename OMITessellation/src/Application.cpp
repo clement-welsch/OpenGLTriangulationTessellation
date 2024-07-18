@@ -135,18 +135,6 @@ int main(void)
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	/*float positions[] = {
-		-0.5f, -0.5f,
-		 0.5f,  -0.5f,
-		 0.5f, 0.5f,
-		 -0.5f, 0.5f,
-	};
-
-	unsigned int indices[] = {
-		0,1,2,
-		2,3,0
-	};*/
-
 	{
 		VertexArray va;
 		VertexBuffer vb (&shape.m_listVertex[0], shape.m_listVertex.size() * sizeof(float));
@@ -162,18 +150,19 @@ int main(void)
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
 
 		//Shader setup
-		Shader shader;
-		shader.SetUniformMat4f("u_model", model);
-		shader.SetUniformMat4f("u_view", view);
-		shader.SetUniformMat4f("u_mvp", proj);
+		Shader shaderBasic;
+		shaderBasic.SetUniformMat4f("u_mvp", proj);
+
+		Shader shaderTess(true);
+		shaderTess.SetUniformMat4f("u_mvp", proj);
+
 		Renderer renderer;
 
 		while (!glfwWindowShouldClose(window))
 		{
 			// Clear the screen
 			renderer.Clear();
-			shader.Bind();
-			renderer.Draw(va, ib, shader);
+			renderer.Draw(va, ib, shaderBasic, shaderTess);
 
 			// Swap buffers
 			GLCall(glfwSwapBuffers(window));
@@ -183,7 +172,8 @@ int main(void)
 		ib.Unbind();
 		va.Unbind();
 		vb.Unbind();
-		shader.Unbind();
+		shaderBasic.Unbind();
+		shaderTess.Unbind();
 
 		// Cleanup VBO
 		GLCall(glDeleteVertexArrays(1, &VertexArrayID));

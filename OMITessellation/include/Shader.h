@@ -8,6 +8,7 @@ class Shader
 {
 public:
 	Shader();
+	Shader(const bool _activateTess);
 	~Shader();
 
 	void Bind() const;
@@ -21,7 +22,8 @@ public:
 private:
 	std::string ReadText(const char* textFile);
 	unsigned int CompileShader(unsigned int _type, const std::string& _source);
-	unsigned int CreateShader();
+	unsigned int CreateBasicShader();
+	unsigned int CreateTessellationShader();
 	int GetUniformLocation(const std::string& _name);
 
 	unsigned int m_rendererID;
