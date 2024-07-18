@@ -75,14 +75,18 @@ This is an open ended assignment so feel free to be creative. Here are a few of 
 We don’t really expect any code but you are free to add it if you wish.
 
 ### src ###
-####OpenGL Project Setup####
+#### OpenGL Project Setup ####
 + https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
 
-####Delaunay####
+#### Delaunay ####
 + https://github.com/jbegaint/delaunay-cpp
 + https://github.com/delfrrr/delaunator-cpp
 + https://github.com/senhorsolar/concavehull
 + https://mapbox.github.io/delaunator/
++ 
+#### TriangulationByEarClipping ####
++ https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
++ https://github.com/ssell/Ear-Clipping
 
 ####Tesselation####
 + https://www.youtube.com/watch?v=21gfE-zUym8
