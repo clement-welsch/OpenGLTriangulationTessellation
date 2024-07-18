@@ -10,7 +10,8 @@ Shape::Shape(const std::string& _filePath)
 	using Coord = double;
 	using N = uint32_t;
 	using Point = std::array<Coord, 2>;
-	std::vector<std::vector<std::array<Coord, 2>>> polygon;
+	
+	std::vector<Point> listPoint;
 
 
 	std::ifstream infile(_filePath, std::ifstream::binary);
@@ -27,10 +28,14 @@ Shape::Shape(const std::string& _filePath)
 
 			if (size % 2 == 0)
 			{
-				polygon.push_back({ {m_listVertex[size - 2], m_listVertex[size - 1]} });
+				listPoint.push_back({ {m_listVertex[size - 2], m_listVertex[size - 1]} });
 			}
 		}
 	}
+
+	//Ear clipping triangulation
+	std::vector<std::vector<Point>> polygon;
+	polygon.push_back(listPoint);
 	std::vector<N> indices = mapbox::earcut<N>(polygon);
-	m_listIndex = std::copy(vect1.begin(), vect1.end(), back_inserter(vect2));
+	m_listIndex = std::vector<int>(indices.begin(), indices.end());
 }

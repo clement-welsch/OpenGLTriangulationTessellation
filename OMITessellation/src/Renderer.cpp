@@ -45,7 +45,7 @@ bool GLCheckError()
 
 void Renderer::Clear() const
 {
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    glClearColor(0.49f, 0.49f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -55,7 +55,7 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
     _ib.Bind();
     _va.Bind();
 
-    const bool showPatches = true;
+    const bool showPatches = false;
 
     if(showPatches)
     {
@@ -71,18 +71,18 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glEnable(GL_CULL_FACE);
         }
-        _shader.SetUniform4f("u_color", 1.0f, 1.0f, 1.0f, 1.0f);
+        _shader.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
         GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
         GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
     }
     else
     {
-        _shader.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
+        _shader.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
         GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
         GLCall(glPointSize(10.0f));
-        _shader.SetUniform4f("u_color", 0.0f, 1.0f, 0.0f, 1.0f);
+        _shader.SetUniform4f("u_color", 0.28f, 0.64f, 0.29f, 1.0f);
         GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-        _shader.SetUniform4f("u_color", 0.0f, 0.0f, 1.0f, 1.0f);
+        _shader.SetUniform4f("u_color", 0.13f, 0.3f, 1.0f, 0.13f);
         GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
     }
 }
