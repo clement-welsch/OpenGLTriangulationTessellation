@@ -121,9 +121,9 @@ unsigned int Shader::CreateShader()
 	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentCode);
 
 	GLCall(glAttachShader(program, vs));
-	GLCall(glAttachShader(program, tesc));
-	GLCall(glAttachShader(program, tese));
-	GLCall(glAttachShader(program, geos));
+	//GLCall(glAttachShader(program, tesc));
+	//GLCall(glAttachShader(program, tese));
+	//GLCall(glAttachShader(program, geos));
 	GLCall(glAttachShader(program, fs));
 
 	GLCall(glLinkProgram(program));

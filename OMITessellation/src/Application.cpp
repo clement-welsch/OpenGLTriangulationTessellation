@@ -43,6 +43,7 @@ int main(void)
 	if (!glfwInit())
 	{
 		std::cout << "Failed to initialize GLEW" << std::endl;
+		system("pause");
 		return -1;
 	}
 
@@ -85,9 +86,10 @@ int main(void)
 	//fileNameSelected = s_squareShapeFilePath;
 	Shape shape(fileNameSelected);
 
-	if (shape.m_listVertex.empty())
+	if (shape.m_listVertex.empty() || shape.m_listIndex.empty())
 	{
 		std::cout << "The file has not been found or is empty!" << std::endl;
+		system("pause");
 		return -1;
 	}
 
@@ -105,6 +107,7 @@ int main(void)
 	{
 		std::cout << "Failed to initialize GLFW" << std::endl;
 		glfwTerminate();
+		system("pause");
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
@@ -116,6 +119,7 @@ int main(void)
 	{
 		std::cout << "Failed to initialize GLEW" << std::endl;
 		glfwTerminate();
+		system("pause");
 		return -1;
 	}
 
@@ -188,6 +192,6 @@ int main(void)
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
-
+	system("pause");
 	return 0;
 }
