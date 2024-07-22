@@ -88,6 +88,7 @@ We don’t really expect any code but you are free to add it if you wish.
 + https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 + https://github.com/ssell/Ear-Clipping
 + https://github.com/mapbox/earcut.hpp
++ https://www.youtube.com/watch?v=QAdfkylpYwc
 
 ####Tesselation####
 + https://www.youtube.com/watch?v=21gfE-zUym8
