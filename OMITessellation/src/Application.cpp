@@ -14,7 +14,6 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 
-const static std::string s_smallShapeFilePath = "res/json/small.json";
 const static std::string s_squareShapeFilePath = "res/json/square.json";
 const static std::string s_cShapeFilePath = "res/json/c.json";
 const static std::string s_infiniteShapeFilePath = "res/json/infinite.json";
@@ -52,12 +51,11 @@ int main(void)
 
 	//Select JSON File
 	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
-	std::cout << "1-Small Square shape" << std::endl;
-	std::cout << "2-Big Square shape" << std::endl;
+	std::cout << "1-Big Square shape" << std::endl;
+	std::cout << "2-infinite shape" << std::endl;
 	std::cout << "3-C shape" << std::endl;
-	std::cout << "4-infinite shape" << std::endl;
-	std::cout << "5-Chaos shape" << std::endl;
-	std::cout << "6-Quit" << std::endl;
+	std::cout << "4-Chaos shape" << std::endl;
+	std::cout << "5-Quit" << std::endl;
 
 	std::string line;
 	std::getline(std::cin, line);
@@ -65,18 +63,15 @@ int main(void)
 	switch (line[0])
 	{
 		case 49:
-			fileNameSelected = s_smallShapeFilePath;
+			fileNameSelected = s_squareShapeFilePath;
 			break;
 		case 50:
-			fileNameSelected = s_squareShapeFilePath;
+			fileNameSelected = s_infiniteShapeFilePath;
 			break;
 		case 51:
 			fileNameSelected = s_cShapeFilePath;
 			break;
 		case 52:
-			fileNameSelected = s_infiniteShapeFilePath;
-			break;
-		case 53:
 			fileNameSelected = s_chaosShapeFilePath;
 			break;
 		default:
