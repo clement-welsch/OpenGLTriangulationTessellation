@@ -56,7 +56,8 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
 
     {
         _shaderBasic.Bind();
-       _shaderBasic.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
+        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 3));
+        _shaderBasic.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
         GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
         GLCall(glPointSize(10.0f));
         _shaderBasic.SetUniform4f("u_color", 0.28f, 0.64f, 0.29f, 1.0f);

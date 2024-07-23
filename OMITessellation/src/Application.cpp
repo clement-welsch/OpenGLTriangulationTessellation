@@ -19,23 +19,6 @@ const static std::string s_cShapeFilePath = "res/json/c.json";
 const static std::string s_infiniteShapeFilePath = "res/json/infinite.json";
 const static std::string s_chaosShapeFilePath = "res/json/chaos.json";
 
-static double s_ortho = 10.0f;
-
-// Get the horizontal and vertical screen sizes in pixel
-void GetDesktopResolution(int& _horizontal, int& _vertical)
-{
-	RECT desktop;
-	// Get a handle to the desktop window
-	const HWND hDesktop = GetDesktopWindow();
-	// Get the size of screen to the variable desktop
-	GetWindowRect(hDesktop, &desktop);
-	// The top left corner will have coordinates (0,0)
-	// and the bottom right corner will have coordinates
-	// (horizontal, vertical)
-	_horizontal = desktop.right;
-	_vertical = desktop.bottom;
-}
-
 int main(void)
 {
 	// Initialise GLFW
@@ -97,7 +80,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 	// Open a window and create its OpenGL context
-	GLFWwindow* window = glfwCreateWindow(1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1024, 768, "Ear Clipping Triangulation & Tessellation", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to initialize GLFW" << std::endl;
@@ -147,9 +130,11 @@ int main(void)
 		//Shader setup
 		Shader shaderBasic;
 		shaderBasic.SetUniformMat4f("u_mvp", proj);
+		shaderBasic.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
 
 		Shader shaderTess(true);
 		shaderTess.SetUniformMat4f("u_mvp", proj);
+		shaderTess.SetUniform4f("u_color", 0.0f, 1.0f, 0.0f, 1.0f);
 
 		Renderer renderer;
 

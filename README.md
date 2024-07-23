@@ -1,93 +1,79 @@
-# OMI
-OMI Technical test
+# Triangulation and Tessellation
 
-## C++ Programming Assignment
 
-### Goal
+## Goal
 
 ---
+The goal of the project is to ally triangulation and tessellation on various shapes of polygons.
 
-In this assignment we want to see your ability to write clean, maintainable, and efficient C++ to solve the sort of problem that is common in computer graphics. You can make this as simple or complex as you like and you are free to write the algorithm from scratch or use third party libraries. Do what you think best demonstrates your skills and explain your choice.
-
-### Assignment
-
+## How to use it
 ---
+The project is available on my personal github account : https://github.com/clement-welsch
+Visual Studio 2022 has been used for this project with some dependencies :
++ OpenGL
++ GLEW
++ GLFW
++ GLM
++ mapbox/earcut : https://github.com/mapbox/earcut.hpp
+The headers and libraries have been linked dynamicly so it should not need any extra work from yourselves to use them in the project.
 
-The points.json files below each contain an array of 2D points that form the outline of a polygon. You need to write a program that loads these points, displays what you loaded, calculates triangulation/tessellation, and displays the result.
+To open the project, click on 'OMITessellation/OMITessellation.sln'
+If you are using an other version of VS or c++ compiler, you might need to 'Retarget Projects'.
++ Open the project on Visual Studio
++ Right-click on OMITessellation inside the 'Solution Explorer dongle' and select 'Retarget Projects'
 
-You can display the results as images or create a UI whatever suits you. If you would like to make it interactive or more fancy feel free to do so.
+Press 'F7' to check if the project compiles correctly.
+Press 'F5' to launch the execution of the project.
+Once the project is launched, a console will open with the possibility to choose on shape to test :
+1- Square shape
+2- Inifinite shape
+3- C letter shape
+4- Chaos shape
+5- Quit the program
 
-The red lines show the input data and pale triangles with green outlines are what we would like you to calculate.
+## Folder architecture
+OMITessellation contains the 'C++ Programming Assignment'
+OMITessellation\api contains the dependencies.
+OMITessellation\include & OMITessellation\src contain the source code of the project.
+OMITessellation\res contains the JSON files and the shader files.
 
-### What we are looking for
+## Project architecture
 
----
+### OpenGL
+The architecture of the OpenGL project has been done following the structure of project proposed by an gaming programmer influencer : The Cherno - OpenGL series. (1)
+I built the classes needed to setup the 3D API, linked the dependencies, load the json file, parse and compile the shader.
+Applicaton is the main file of the project, it will launch the console, ask the loading of the shape and proceed the rendering loop for drawing and the Tessellation of the polygon.
 
-- We are looking for clean, maintainable, and efficient C++ code.
-- Be creative and impress us.
-- Provide clear and detailed build instructions as we will build and run your code.
+The class Shape manages the loading of the polygon chosen and apply the ear clipping triangulation to get the indexes array.
+All the setup of the shaders involed are proccess by the class Shader :  parse, compile, link to the shader progam and released.
+In the rendering loop inside the Application, we call Renderer.Draw(...) which will manage the drawing of the polygon and the tesselation result.
 
-First thing first, I start this project by creating a private github project to track my code and use pull requests to make evolve my code step by step.
-After that, I use "The cherno OpenGL Tutorials" to setup my visual studio project because I beleive he is really reliable.
-To load JSON files, I decided to use an homemade reader because the construction of json files provided are really simple.
-Otherwise, I would have used rapidjson that I was using at my previous job or jsoncpp.
+### Triangulation
+At the beginning of the project, I chose to use the Delaunay algorithm to perform the triangulation of the shape.
+But an issue accured quite fast due to the concave shape of the polygons. (2) & (3)
+I have tried to implement a concave hull overlayer to the algorithm to fix the issue but it did not work properly on 50% of the shapes. (4)
 
-- Write your own algorithm or use third party libraries. Explain your choice.
-- Explain the algorithm that you used.
-- Describe pros and cons of your solution.
+After few research, I found out another algorithm which is less popular and less documented : Ear-Clipping.
+I found few articles and projects which have implemented it. (5)
+I decided to use the work of 'mapbox/earcut' who did a great job nonetheless, I had to adapt it to my needs. (6)
 
-
-## 3D High Level Assignment ##
-
-### Goal ###
-
----
-
-In this assignment we are aiming to understand how you would design a product similar to what we currently have at Omi and how you would plan to improve it in the future. 
-
-### The Assignment ###
-
----
-
-As you have seen in the first part of the recruitment process Omi provides a service that allows our customers to have a digital twin of their products that can be used to generate a range of advertising media.
-
-We would like you to explain what architecture you would use to build a product similar to this, how you would extend and improve the product in the future, and how you would work with other members of the team to integrate your work.
-
-### What we are looking for ###
-
----
-
-This is an open ended assignment so feel free to be creative. Here are a few of the things that we will be looking for:
-
-- An overview of how you would structure the product. Talk about all the major components including UI, 3D webview, backend processing, databases, and how artists would add assets.
-- How would you achieve the real time 3D rendering?
-- How would you achieve high quality final renders?
-- How would you extend the product in the future? I’m thinking Metaverse, VR, AR, and interacting with other platforms as well as new features that the customer would use.
-- Talk about the assets what type of data would we need to store and how would it be managed.
-- How would artists use the system to upload assets and what validation would need performing?
-- What is the difference between real time assets and those used for high quality renders?
-- What sort of things could you do to improve the efficiency of other members of the team? Especially in relation to product/3D model on-boarding.
-
-### What we are not looking for ###
-
----
-
-We don’t really expect any code but you are free to add it if you wish.
+### Tessellation
+Due to the algorithm of triangulation that has been chosen to define the indexes array. 
+The tessellation performed at this stage will be on 3 vertices patches.
+The vertex shader is really simple, it multiply the matrix MVP (Model View Projection) to the vertex coordinates.
 
 ### src ###
 #### OpenGL Project Setup ####
-+ https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
++ (1) https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
 
 #### Delaunay ####
-+ https://github.com/jbegaint/delaunay-cpp
-+ https://github.com/delfrrr/delaunator-cpp
-+ https://github.com/senhorsolar/concavehull
-+ https://mapbox.github.io/delaunator/
-+ 
++ (2) https://mapbox.github.io/delaunator/
++ (3) https://github.com/delfrrr/delaunator-cpp
++ (4) https://github.com/senhorsolar/concavehull
+
 #### TriangulationByEarClipping ####
-+ https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
-+ https://github.com/ssell/Ear-Clipping
-+ https://github.com/mapbox/earcut.hpp
++ (5) https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
++ (6) https://github.com/mapbox/earcut.hpp
 
 ####Tesselation####
 + https://www.youtube.com/watch?v=21gfE-zUym8

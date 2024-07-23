@@ -70,9 +70,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\Basic.shader">
-      <Filter>Resource Files\res\shader</Filter>
-    </None>
     <None Include="res\shader\fragment.frag">
       <Filter>Resource Files\res\shader</Filter>
     </None>

@@ -38,7 +38,6 @@
     <ClInclude Include="include\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\Basic.shader" />
     <None Include="res\shader\fragment.frag" />
     <None Include="res\shader\geometry.geom" />
     <None Include="res\shader\tessellation.tesc" />

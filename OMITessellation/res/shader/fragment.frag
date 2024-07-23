@@ -9,4 +9,5 @@ uniform sampler2D screen;
 void main()
 {
 	color = u_color;
+	//color = vec4(1.0,0.0,0.0,1.0);
 }
