@@ -182,7 +182,14 @@ void Earcut<N>::operator()(const Polygon& points) {
         inv_size = inv_size != .0 ? (32767. / inv_size) : .0;
     }
 
-    earcutLinked(outerNode);
+    if (points[0].size() % 3 == 0)
+    {
+        earcutLinked(outerNode, -1);
+    }
+    else
+    {
+        earcutLinked(outerNode);
+    }
 
     nodes.clear();
 }
@@ -263,8 +270,16 @@ void Earcut<N>::earcutLinked(Node* ear, int pass) {
     Node* prev;
     Node* next;
 
+    if (pass < 0)
+    {
+        ear = ear->next;
+    }
+
+    unsigned int ping_pong = 0;
+
     // iterate through ears, slicing them one by one
-    while (ear->prev != ear->next) {
+    while (ear->prev != ear->next)
+    {
         prev = ear->prev;
         next = ear->next;
 
