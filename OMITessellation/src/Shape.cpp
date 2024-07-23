@@ -10,7 +10,7 @@ Shape::Shape(const std::string& _filePath)
 	using Coord = double;
 	using N = uint32_t;
 	using Point = std::array<Coord, 2>;
-	
+
 	std::vector<Point> listPoint;
 
 
