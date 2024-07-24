@@ -12,8 +12,6 @@ void main(void)
 	EmitVertex();
 	gl_Position = gl_in[2].gl_Position;
 	EmitVertex();
-	//gl_Position = gl_in[3].gl_Position;
-	//EmitVertex();
 	
 	EndPrimitive();
 }

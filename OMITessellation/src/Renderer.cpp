@@ -49,17 +49,26 @@ void Renderer::Clear() const
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _shader) const
+void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _shaderBasic, Shader& _shaderTess) const
 {
-    _shader.Bind();
     _ib.Bind();
     _va.Bind();
 
-    const bool showPatches = false;
-
-    if(showPatches)
     {
-        bool wireframe = true;
+        _shaderBasic.Bind();
+        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 3));
+        _shaderBasic.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
+        GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+        GLCall(glPointSize(10.0f));
+        _shaderBasic.SetUniform4f("u_color", 0.28f, 0.64f, 0.29f, 1.0f);
+        GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+        _shaderBasic.Unbind();
+    }
+
+    {
+        _shaderTess.Bind();
+        _shaderTess.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
+        bool wireframe = false;
         if (wireframe)
         {
             GLCall(glPointSize(10.0f));
@@ -71,18 +80,17 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glEnable(GL_CULL_FACE);
         }
-        _shader.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
-        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 4));
+        
+        GLCall(glPatchParameteri(GL_PATCH_VERTICES, 3));
         GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+
+        _shaderTess.Unbind();
     }
-    else
+
     {
-        _shader.SetUniform4f("u_color", 0.73f, 0.73f, 0.78f, 1.0f);
-        GLCall(glDrawElements(GL_TRIANGLES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-        GLCall(glPointSize(10.0f));
-        _shader.SetUniform4f("u_color", 0.28f, 0.64f, 0.29f, 1.0f);
-        GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-        _shader.SetUniform4f("u_color", 0.13f, 0.3f, 1.0f, 0.13f);
+        _shaderBasic.Bind();
+        _shaderBasic.SetUniform4f("u_color", 0.13f, 0.3f, 1.0f, 0.13f);
         GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+        _shaderBasic.Unbind();
     }
 }
