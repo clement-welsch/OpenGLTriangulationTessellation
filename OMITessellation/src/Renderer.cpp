@@ -54,6 +54,7 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
     _ib.Bind();
     _va.Bind();
 
+    //1-Draw Triangles, lines from triangulation
     {
         _shaderBasic.Bind();
         GLCall(glPatchParameteri(GL_PATCH_VERTICES, 3));
@@ -64,7 +65,7 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
         GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
         _shaderBasic.Unbind();
     }
-
+    //2-Draw lines from tessellation
     {
         _shaderTess.Bind();
         _shaderTess.SetUniform4f("u_color", 0.64f, 0.28f, 0.29f, 1.0f);
@@ -78,7 +79,7 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
 
         _shaderTess.Unbind();
     }
-
+    //3-Draw vertex
     {
         _shaderBasic.Bind();
         _shaderBasic.SetUniform4f("u_color", 0.13f, 0.3f, 1.0f, 0.13f);

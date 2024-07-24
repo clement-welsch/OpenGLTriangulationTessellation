@@ -5,11 +5,11 @@
 
 struct VertexBufferElement
 {
-	unsigned int type;
-	unsigned int count;
-	unsigned char normalized;
+	unsigned int m_type;
+	unsigned int m_count;
+	unsigned char m_normalized;
 
-	VertexBufferElement(unsigned int _type, unsigned int _count, bool _normalized) : type(_type), count(_count), normalized(_normalized)
+	VertexBufferElement(unsigned int _type, unsigned int _count, bool _normalized) : m_type(_type), m_count(_count), m_normalized(_normalized)
 	{}
 
 	static unsigned int GetSizeOfType(unsigned int _type)
