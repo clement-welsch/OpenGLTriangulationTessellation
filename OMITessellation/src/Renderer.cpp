@@ -62,8 +62,6 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
         GLCall(glPointSize(10.0f));
         _shaderBasic.SetUniform4f("u_color", 0.28f, 0.64f, 0.29f, 1.0f);
         GLCall(glDrawElements(GL_LINE_STRIP, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-        _shaderBasic.SetUniform4f("u_color", 0.13f, 0.3f, 1.0f, 0.13f);
-        GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
         _shaderBasic.Unbind();
     }
 
@@ -87,5 +85,12 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
         GLCall(glDrawElements(GL_PATCHES, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 
         _shaderTess.Unbind();
+    }
+
+    {
+        _shaderBasic.Bind();
+        _shaderBasic.SetUniform4f("u_color", 0.13f, 0.3f, 1.0f, 0.13f);
+        GLCall(glDrawElements(GL_POINTS, _ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+        _shaderBasic.Unbind();
     }
 }

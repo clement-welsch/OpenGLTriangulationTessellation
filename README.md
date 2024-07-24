@@ -1,6 +1,5 @@
 # Triangulation and Tessellation
 
-
 ## Goal
 
 ---
@@ -60,25 +59,34 @@ I decided to use the work of 'mapbox/earcut' who did a great job nonetheless, I 
 ### Tessellation
 Due to the algorithm of triangulation that has been chosen to define the indexes array. 
 The tessellation performed at this stage will be on 3 vertices patches.
-The vertex shader is really simple, it multiply the matrix MVP (Model View Projection) to the vertex coordinates.
+Find a algorithm that explain how to control and evaluate the tesselation is not trivial but quite simple at the end. (7)
 
-### src ###
+### Rendering
+Due to the obligation to the Tessellation shader which can only render patches.
+We use two shaders : Basic (Vertex/Fragment shader) and Tessellation (Vertex/Controller/Evaluation/Geometry/Fragment).
+
+The rendering is quite simple, we print one by one each layer :
++ Triangles (light blue), 'Basic Shader'
++ Ear clipping triangulation (green lines), 'Basic Shader'
++ Tessellation (red lines), 'Tessellation Shader'
++ Vertices (blue), 'Basic Shader'
+
+### src
 #### OpenGL Project Setup ####
 + (1) https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
 
-#### Delaunay ####
+#### Delaunay
 + (2) https://mapbox.github.io/delaunator/
 + (3) https://github.com/delfrrr/delaunator-cpp
 + (4) https://github.com/senhorsolar/concavehull
 
-#### TriangulationByEarClipping ####
+#### TriangulationByEarClipping
 + (5) https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 + (6) https://github.com/mapbox/earcut.hpp
 
-####Tesselation####
+####Tesselation (7)
 + https://www.youtube.com/watch?v=21gfE-zUym8
 + https://www.youtube.com/watch?v=OqRMNrvu6TE
 + https://learnopengl.com/Guest-Articles/2021/Tessellation/Tessellation
 + https://github.com/sp4cerat/OpenGL-Tessellation-Shader-Tutorial-C-/tree/master
-
 + https://gamedev.stackexchange.com/questions/153391/opengl-tessellation-shader-not-working
