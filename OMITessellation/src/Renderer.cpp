@@ -67,15 +67,7 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
 
     {
         _shaderTess.Bind();
-        _shaderTess.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
-        bool wireframe = false;
-        if (wireframe)
-        {
-            GLCall(glPointSize(10.0f));
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            glDisable(GL_CULL_FACE);
-        }
-        else
+        _shaderTess.SetUniform4f("u_color", 0.64f, 0.28f, 0.29f, 1.0f);
         {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glEnable(GL_CULL_FACE);
