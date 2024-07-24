@@ -1,7 +1,7 @@
 #version 460 core
 
 // Quads
-layout (quads, equal_spacing , ccw) in;
+layout(triangles, equal_spacing, ccw) in;
 
 void main()
 {	

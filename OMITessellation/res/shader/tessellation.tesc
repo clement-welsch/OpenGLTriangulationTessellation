@@ -5,8 +5,8 @@ layout (vertices = 3) out;
 
 void main(void)
 {
-	float outer = 4.0;
-	float inner = 2.0;
+	float outer = 1.0;
+	float inner = 0.0;
 	gl_TessLevelOuter[0] = outer;
 	gl_TessLevelOuter[1] = outer;
 	gl_TessLevelOuter[2] = outer;

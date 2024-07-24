@@ -70,7 +70,7 @@ void Renderer::Draw(const VertexArray& _va, const IndexBuffer&  _ib, Shader& _sh
     {
         _shaderTess.Bind();
         _shaderTess.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
-        bool wireframe = true;
+        bool wireframe = false;
         if (wireframe)
         {
             GLCall(glPointSize(10.0f));
