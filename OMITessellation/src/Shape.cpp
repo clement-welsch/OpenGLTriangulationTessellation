@@ -6,12 +6,13 @@
 
 Shape::Shape(const std::string& _filePath)
 {
-	//Ear clipping triangulation
+	//init
 	using Coord = double;
 	using N = uint32_t;
 	using Point = std::array<Coord, 2>;
 	std::vector<Point> listPoint;
 
+	//Get Vertex positions and indexes
 	std::ifstream infile(_filePath, std::ifstream::binary);
 	std::string line;
 
@@ -31,9 +32,9 @@ Shape::Shape(const std::string& _filePath)
 		}
 	}
 
-	//Ear clipping triangulation
-	std::vector<std::vector<Point>> polygon;
-	polygon.push_back(listPoint);
-	std::vector<N> indices = mapbox::earcut<N>(polygon);
+	//Compute Ear clipping triangulation
+	std::vector<std::vector<Point>> listPolygons;
+	listPolygons.push_back(listPoint);
+	std::vector<N> indices = mapbox::earcut<N>(listPolygons);
 	m_listIndex = std::vector<int>(indices.begin(), indices.end());
 }
