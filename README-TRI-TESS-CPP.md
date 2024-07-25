@@ -4,6 +4,10 @@
 
 ---
 The goal of the project is to ally triangulation and tessellation on various shapes of polygons.
+![Square](\OMITessellation\res\expected\Square.png "Square")
+![Infinite](\OMITessellation\res\expected\Infinite.png "Infinite")
+![C](\OMITessellation\res\expected\C.png "C")
+![Chaos](\OMITessellation\res\expected\Chaos.png "Chaos")
 
 ## How to use it
 ---
