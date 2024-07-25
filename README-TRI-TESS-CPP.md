@@ -4,10 +4,10 @@
 
 ---
 The goal of the project is to ally triangulation and tessellation on various shapes of polygons.
-![Square](./OMITessellation/res/expected/Square.png "Square"){width=50 height=50}
-![Infinite](./OMITessellation/res/expected/Infinite.png "Infinite"){width=50 height=50}
-![C](./OMITessellation/res/expected/C.png "C"){width=50 height=50}
-![Chaos](./OMITessellation/res/expected/Chaos.png "Chaos"){width=50 height=50}
+![Square](./OMITessellation/res/expected/Square.png "Square" =50x50)
+![Infinite](./OMITessellation/res/expected/Infinite.png "Infinite")
+![C](./OMITessellation/res/expected/C.png "C")
+![Chaos](./OMITessellation/res/expected/Chaos.png "Chaos")
 
 ## How to use it
 ---
