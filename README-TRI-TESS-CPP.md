@@ -87,7 +87,6 @@ There is a example if we use another parameter of tessellation :
 <img src="./OMITessellation/res/result/SquareTess22.png" alt="Square Tessellation 22" width="200"/>
 <img src="./OMITessellation/res/result/InfiniteTess22.png" alt="Infinite Tessellation 22" width="200"/>
 <img src="./OMITessellation/res/result/CTess22.png" alt="C Tessellation 22" width="200"/>
-<img src="./OMITessellation/res/result/ChaosTess22.png" alt="Chaos Tessellation 22" width="200"/>
 
 ### Rendering
 Due to the obligation to the Tessellation shader which can only render patches.
