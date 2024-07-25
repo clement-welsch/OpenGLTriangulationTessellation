@@ -4,8 +4,8 @@
 
 ---
 The goal of the project is to ally triangulation and tessellation on various shapes of polygons.
-<img src="./OMITessellation/res/expected/Square.png" alt="Square" width="50" height="50"/>
-![Square](./OMITessellation/res/expected/Square.png =50x50)
+<img src="./OMITessellation/res/expected/Square.png" alt="Square" width="100"/>
+![Square](./OMITessellation/res/expected/Square.png)
 ![Infinite](./OMITessellation/res/expected/Infinite.png "Infinite")
 ![C](./OMITessellation/res/expected/C.png "C")
 ![Chaos](./OMITessellation/res/expected/Chaos.png "Chaos")
