@@ -1,9 +1,14 @@
-# Triangulation and Tessellation
+# **Triangulation and Tessellation**
 
 ## Goal
 
 ---
 The goal of the project is to ally triangulation and tessellation on various shapes of polygons.
+
+<img src="./OMITessellation/res/expected/Square.png" alt="Square" width="200"/>
+<img src="./OMITessellation/res/expected/Infinite.png" alt="Infinite" width="200"/>
+<img src="./OMITessellation/res/expected/C.png" alt="C" width="200"/>
+<img src="./OMITessellation/res/expected/Chaos.png" alt="Chaos" width="200"/>
 
 ## How to use it
 ---
@@ -48,6 +53,12 @@ All the setup of the shaders involved are processed by the class Shader :  parse
 In the rendering loop inside the Application, we call Renderer.Draw(...) which will manage the drawing of the polygon and the tesselation result.
 
 ### Triangulation
+
+<img src="./OMITessellation/res/result/SquareTri.png" alt="Square Triangulation" width="200"/>
+<img src="./OMITessellation/res/result/InfiniteTri.png" alt="Infinite Triangulation" width="200"/>
+<img src="./OMITessellation/res/result/CTri.png" alt="C Triangulation" width="200"/>
+<img src="./OMITessellation/res/result/ChaosTri.png" alt="Chaos Triangulation" width="200"/>
+
 At the beginning of the project, I chose to use the Delaunay algorithm to perform the triangulation of the shape.
 But an issue occurred quite fast due to the concave shape of the polygons. (2) & (3)
 I have tried to implement a concave hull overlayer to the algorithm to fix the issue but it did not work properly on 50% of the shapes. (4)
@@ -63,6 +74,19 @@ Finding an algorithm that explains how to control and evaluate the tessellation 
 To achieve the result expected, there is the value defined inside the tessellation evaluation shader :
 + Outer : 1.0
 + Inner : 0.0
+
+<img src="./OMITessellation/res/result/SquareTess10.png" alt="Square Tessellation 10" width="200"/>
+<img src="./OMITessellation/res/result/InfiniteTess10.png" alt="Infinite Tessellation 10" width="200"/>
+<img src="./OMITessellation/res/result/CTess10.png" alt="C Tessellation 10" width="200"/>
+<img src="./OMITessellation/res/result/ChaosTess10.png" alt="Chaos Tessellation 10" width="200"/>
+
+There is a example if we use another parameter of tessellation :
++ Outer : 2.0
++ Inner : 2.0
+
+<img src="./OMITessellation/res/result/SquareTess22.png" alt="Square Tessellation 22" width="200"/>
+<img src="./OMITessellation/res/result/InfiniteTess22.png" alt="Infinite Tessellation 22" width="200"/>
+<img src="./OMITessellation/res/result/CTess22.png" alt="C Tessellation 22" width="200"/>
 
 ### Rendering
 Due to the obligation to the Tessellation shader which can only render patches.
@@ -87,7 +111,7 @@ The rendering is quite simple, we print one by one each layer :
 + (5) https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 + (6) https://github.com/mapbox/earcut.hpp
 
-####Tessellation (7)
+#### Tessellation (7)
 + https://www.youtube.com/watch?v=21gfE-zUym8
 + https://www.youtube.com/watch?v=OqRMNrvu6TE
 + https://learnopengl.com/Guest-Articles/2021/Tessellation/Tessellation
