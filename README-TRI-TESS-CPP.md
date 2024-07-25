@@ -1,4 +1,4 @@
-# Triangulation and Tessellation
+# **Triangulation and Tessellation**
 
 ## Goal
 
