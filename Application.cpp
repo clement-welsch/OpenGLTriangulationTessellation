@@ -21,7 +21,6 @@
 const static std::string s_squareShapeFilePath = "../res/json/square.json";
 const static std::string s_cShapeFilePath = "../res/json/c.json";
 const static std::string s_infiniteShapeFilePath = "../res/json/infinite.json";
-const static std::string s_chaosShapeFilePath = "../res/json/chaos.json";
 
 int main(void)
 {
@@ -33,43 +32,45 @@ int main(void)
 		return -1;
 	}
 
-	//---Shape
-	std::string fileNameSelected;
+	//---Shapes
 
-	//Select JSON File
-	std::cout << "Choose which file to open by typing the index related to it :" << std::endl;
-	std::cout << "1-Big Square shape" << std::endl;
-	std::cout << "2-infinite shape" << std::endl;
-	std::cout << "3-C shape" << std::endl;
-	std::cout << "4-Chaos shape" << std::endl;
-	std::cout << "5-Quit" << std::endl;
 
-	std::string line;
-	std::getline(std::cin, line);
+	Shape shapeSquare(s_squareShapeFilePath);
+	Shape shapeInfinite(s_infiniteShapeFilePath);
+	Shape shapeC(s_cShapeFilePath);
 
-	switch (line[0])
+	std::vector<Shape> listShapes;
+
+	if (shapeSquare.m_listVertex.empty() || shapeSquare.m_listIndex.empty())
 	{
-		case 49:
-			fileNameSelected = s_squareShapeFilePath;
-			break;
-		case 50:
-			fileNameSelected = s_infiniteShapeFilePath;
-			break;
-		case 51:
-			fileNameSelected = s_cShapeFilePath;
-			break;
-		case 52:
-			fileNameSelected = s_chaosShapeFilePath;
-			break;
-		default:
-			return 0;
+		std::cout << "The file square.json has not been found or is empty!" << std::endl;
+	}
+	else
+	{
+		listShapes.push_back(shapeSquare);
 	}
 
-	Shape shape(fileNameSelected);
-
-	if (shape.m_listVertex.empty() || shape.m_listIndex.empty())
+	if (shapeInfinite.m_listVertex.empty() || shapeInfinite.m_listIndex.empty())
 	{
-		std::cout << "The file has not been found or is empty!" << std::endl;
+		std::cout << "The file infinite.json has not been found or is empty!" << std::endl;
+	}
+	else
+	{
+		listShapes.push_back(shapeInfinite);
+	}
+
+	if (shapeC.m_listVertex.empty() || shapeC.m_listIndex.empty())
+	{
+		std::cout << "The file c.json has not been found or is empty!" << std::endl;
+	}
+	else
+	{
+		listShapes.push_back(shapeC);
+	}
+
+	if (listShapes.empty() || listShapes.empty())
+	{
+		std::cout << "The vector Shape is empty!" << std::endl;
 		system("pause");
 		return -1;
 	}
@@ -118,12 +119,12 @@ int main(void)
 
 	{
 		VertexArray va;
-		VertexBuffer vb (&shape.m_listVertex[0], shape.m_listVertex.size() * sizeof(float));
-		IndexBuffer ib(&shape.m_listIndex[0], shape.m_listIndex.size());
+		VertexBuffer* vb = new VertexBuffer(&listShapes[0].m_listVertex[0], listShapes[0].m_listVertex.size() * sizeof(float));
+		IndexBuffer* ib = new IndexBuffer(&listShapes[0].m_listIndex[0], listShapes[0].m_listIndex.size());
 
 		VertexBufferLayout layout;
 		layout.Push<float>(2);
-		va.AddBuffer(vb, layout);
+		va.AddBuffer(*vb, layout);
 
 		//matrices transformation
 		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
@@ -155,6 +156,7 @@ int main(void)
 		bool show_demo_window = true;
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+		unsigned int shape_counter = 0;
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -166,10 +168,10 @@ int main(void)
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			renderer.Draw(va, ib, shaderBasic, shaderTess);
+			renderer.Draw(va, *ib, shaderBasic, shaderTess);
 
 			{
-				static float f = 0.0f;
+				/*static float f = 0.0f;
 				static int counter = 0;
 
 				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
@@ -187,6 +189,34 @@ int main(void)
 				ImGui::Text("counter = %d", counter);
 
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+				ImGui::End();*/
+
+				ImGui::Begin("Options");
+
+				if (ImGui::Button("Change Shape"))
+				{
+					if (vb != nullptr)
+					{
+						delete vb;
+					}
+
+					if (ib != nullptr)
+					{
+						delete ib;
+					}
+
+					shape_counter++;
+					if (shape_counter >= listShapes.size())
+					{
+						shape_counter = 0;
+					}
+
+					Shape newShape = listShapes[shape_counter];
+
+					vb = new VertexBuffer(&newShape.m_listVertex[0], newShape.m_listVertex.size() * sizeof(float));
+					ib = new IndexBuffer(&newShape.m_listIndex[0], newShape.m_listIndex.size());
+					va.AddBuffer(*vb, layout);
+				}
 				ImGui::End();
 			}
 
@@ -203,9 +233,11 @@ int main(void)
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 
-		ib.Unbind();
+		ib->Unbind();
+		delete ib;
 		va.Unbind();
-		vb.Unbind();
+		vb->Unbind();
+		delete vb;
 		shaderBasic.Unbind();
 		shaderTess.Unbind();
 
