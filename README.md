@@ -1,5 +1,12 @@
 # README **Triangulation and Tessellation**
 
+<img src="TNT_shape.gif" alt="C" width="200"/>
+<img src="TNT_square_tess.gif" alt="C" width="200"/>
+<img src="TNT_infinite_tess.gif" alt="C" width="200"/>
+<img src="TNT_c_tess.gif" alt="C" width="200"/>
+
+---
+
 ## Goal
 
 ---
@@ -8,7 +15,6 @@ The goal of the project is to ally triangulation and tessellation on various sha
 <img src="./res/expected/Square.png" alt="Square" width="200"/>
 <img src="./res/expected/Infinite.png" alt="Infinite" width="200"/>
 <img src="./res/expected/C.png" alt="C" width="200"/>
-<img src="./res/expected/Chaos.png" alt="Chaos" width="200"/>
 
 ## How to use it
 ---
@@ -54,6 +60,8 @@ In the rendering loop inside the Application, we call Renderer.Draw(...) which w
 ### Triangulation
 
 <img src="./res/result/SquareTri.png" alt="Square Triangulation" width="200"/>
+<img src="./res/result/InfiniteTri.png" alt="Infinite Triangulation" width="200"/>
+<img src="./res/result/CTri.png" alt="C Triangulation" width="200"/>
 
 
 At the beginning of the project, I chose to use the Delaunay algorithm to perform the triangulation of the shape.
@@ -72,10 +80,18 @@ To achieve the result expected, there is the value defined inside the tessellati
 + Outer : 1.0
 + Inner : 0.0
 
+<img src="./res/result/SquareTess10.png" alt="Square Tessellation 10" width="200"/>
+<img src="./res/result/InfiniteTess10.png" alt="Infinite Tessellation 10" width="200"/>
+<img src="./res/result/CTess10.png" alt="C Tessellation 10" width="200"/>
+
 
 There is a example if we use another parameter of tessellation :
 + Outer : 2.0
 + Inner : 2.0
+
+<img src="./res/result/SquareTess22.png" alt="Square Tessellation 22" width="200"/>
+<img src="./res/result/InfiniteTess22.png" alt="Infinite Tessellation 22" width="200"/>
+<img src="./res/result/CTess22.png" alt="C Tessellation 22" width="200"/>
 
 ### Rendering
 Due to the obligation to the Tessellation shader which can only render patches.
