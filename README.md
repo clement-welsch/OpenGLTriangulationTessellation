@@ -1,9 +1,9 @@
 # README **Triangulation and Tessellation**
 
-<img src="TNT_shape.gif" alt="C" width="200"/>
-<img src="TNT_square_tess.gif" alt="C" width="200"/>
-<img src="TNT_infinite_tess.gif" alt="C" width="200"/>
-<img src="TNT_c_tess.gif" alt="C" width="200"/>
+![TNT_shape](https://github.com/user-attachments/assets/c66241dd-2932-4af3-959b-f6d915325f73)
+![TNT_square_tess](https://github.com/user-attachments/assets/4a8e2a28-0a79-4d75-9be4-3c4f239a8cf2)
+![TNT_infinite_tess](https://github.com/user-attachments/assets/602570a6-0e6c-4b48-a3dc-2fb703a8b636)
+![TNT_c_tess](https://github.com/user-attachments/assets/3fde0f61-2f88-4e6e-9ffb-f232700c71b5)
 
 ---
 
