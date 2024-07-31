@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="src\IndexBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shape.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexArray.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexBufferLayout.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\IndexBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shape.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VertexArray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VertexBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VertexBufferLayout.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\json\c.json">
+      <Filter>res\json</Filter>
+    </None>
+    <None Include="res\json\small.json">
+      <Filter>res\json</Filter>
+    </None>
+    <None Include="res\json\square.json">
+      <Filter>res\json</Filter>
+    </None>
+    <None Include="res\shader\fragment.frag">
+      <Filter>res\shader</Filter>
+    </None>
+    <None Include="res\shader\geometry.geom">
+      <Filter>res\shader</Filter>
+    </None>
+    <None Include="res\shader\tessellation.tesc">
+      <Filter>res\shader</Filter>
+    </None>
+    <None Include="res\shader\tessellation.tese">
+      <Filter>res\shader</Filter>
+    </None>
+    <None Include="res\shader\vertex.vert">
+      <Filter>res\shader</Filter>
+    </None>
+    <None Include="res\json\infinite.json">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{98de46d8-7575-4848-8228-c4da5919795f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{a0947b8d-a7a2-4a37-8c6c-edf47601b6f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\json">
+      <UniqueIdentifier>{c4db7ccc-b3e1-4bd2-9ce7-73e65bb22387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\shader">
+      <UniqueIdentifier>{267f0e54-c609-4f45-a6ad-02d4c3963f34}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
