@@ -130,6 +130,10 @@ int main(void)
 		glm::mat4 proj = glm::ortho(-14.0, 14.0, -10.5, 10.5, -1.0, 1.0);
 
 		//Shader setup
+		int innerTessellation = 1;
+		int outerTessellation = 1;
+
+
 		Shader shaderBasic;
 		shaderBasic.SetUniformMat4f("u_mvp", proj);
 		shaderBasic.SetUniform4f("u_color", 1.0f, 0.0f, 0.0f, 1.0f);
@@ -137,6 +141,8 @@ int main(void)
 		Shader shaderTess(true);
 		shaderTess.SetUniformMat4f("u_mvp", proj);
 		shaderTess.SetUniform4f("u_color", 0.0f, 1.0f, 0.0f, 1.0f);
+		shaderTess.SetUniform1f("u_inner", innerTessellation);
+		shaderTess.SetUniform1f("u_outer", outerTessellation);
 
 		Renderer renderer;
 
@@ -153,10 +159,8 @@ int main(void)
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 		// Our state
-		bool show_demo_window = true;
-		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-		unsigned int shape_counter = 0;
+		unsigned int shapeCounter = 0;		
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -171,26 +175,6 @@ int main(void)
 			renderer.Draw(va, *ib, shaderBasic, shaderTess);
 
 			{
-				/*static float f = 0.0f;
-				static int counter = 0;
-
-				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-				ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-				ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-				ImGui::Checkbox("Another Window", &show_another_window);
-
-				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-					counter++;
-				ImGui::SameLine();
-				ImGui::Text("counter = %d", counter);
-
-				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-				ImGui::End();*/
-
 				ImGui::Begin("Options");
 
 				if (ImGui::Button("Change Shape"))
@@ -205,17 +189,31 @@ int main(void)
 						delete ib;
 					}
 
-					shape_counter++;
-					if (shape_counter >= listShapes.size())
+					shapeCounter++;
+					if (shapeCounter >= listShapes.size())
 					{
-						shape_counter = 0;
+						shapeCounter = 0;
 					}
 
-					Shape newShape = listShapes[shape_counter];
+					Shape newShape = listShapes[shapeCounter];
 
 					vb = new VertexBuffer(&newShape.m_listVertex[0], newShape.m_listVertex.size() * sizeof(float));
 					ib = new IndexBuffer(&newShape.m_listIndex[0], newShape.m_listIndex.size());
 					va.AddBuffer(*vb, layout);
+				}
+
+				ImGui::Text("Tessellation");
+				if (ImGui::SliderInt("Inner", &innerTessellation, 0, 10))
+				{
+					shaderTess.Bind();
+					shaderTess.SetUniform1f("u_inner", innerTessellation);
+					shaderTess.Unbind();
+				}
+				if (ImGui::SliderInt("Outer", &outerTessellation, 0, 10))
+				{
+					shaderTess.Bind();
+					shaderTess.SetUniform1f("u_outer", outerTessellation);
+					shaderTess.Unbind();
 				}
 				ImGui::End();
 			}
