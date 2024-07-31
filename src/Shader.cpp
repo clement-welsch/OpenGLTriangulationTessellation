@@ -5,11 +5,11 @@
 #include <iostream>
 #include "Renderer.h"
 
-const static char* s_vertexShaderPath = "res/shader/vertex.vert";
-const static char* s_tessControllerShaderPath = "res/shader/tessellation.tesc";
-const static char* s_tessEvaluationShaderPath = "res/shader/tessellation.tese";
-const static char* s_geometryShaderPath = "res/shader/geometry.geom";
-const static char* s_fragmentShaderPath = "res/shader/fragment.frag";
+const static char* s_vertexShaderPath = "../res/shader/vertex.vert";
+const static char* s_tessControllerShaderPath = "../res/shader/tessellation.tesc";
+const static char* s_tessEvaluationShaderPath = "../res/shader/tessellation.tese";
+const static char* s_geometryShaderPath = "../res/shader/geometry.geom";
+const static char* s_fragmentShaderPath = "../res/shader/fragment.frag";
 
 Shader::Shader() : m_rendererID (0)
 {

@@ -1,78 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp">
+    <ClCompile Include="..\Application.cpp" />
+    <ClCompile Include="..\src\IndexBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
+    <ClCompile Include="..\src\Renderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shader.cpp">
+    <ClCompile Include="..\src\Shader.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shape.cpp">
+    <ClCompile Include="..\src\Shape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\VertexArray.cpp">
+    <ClCompile Include="..\src\VertexArray.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\VertexBuffer.cpp">
+    <ClCompile Include="..\src\VertexBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\VertexBufferLayout.cpp">
+    <ClCompile Include="..\src\VertexBufferLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\IndexBuffer.h">
+    <ClInclude Include="..\src\IndexBuffer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="include\Renderer.h">
+    <ClInclude Include="..\src\Renderer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="include\Shader.h">
+    <ClInclude Include="..\src\Shader.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="include\Shape.h">
+    <ClInclude Include="..\src\Shape.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="include\VertexArray.h">
+    <ClInclude Include="..\src\VertexArray.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="include\VertexBuffer.h">
+    <ClInclude Include="..\src\VertexBuffer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="include\VertexBufferLayout.h">
+    <ClInclude Include="..\src\VertexBufferLayout.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\json\c.json">
+    <None Include="..\res\json\c.json">
       <Filter>res\json</Filter>
     </None>
-    <None Include="res\json\small.json">
+    <None Include="..\res\json\small.json">
       <Filter>res\json</Filter>
     </None>
-    <None Include="res\json\square.json">
+    <None Include="..\res\json\square.json">
       <Filter>res\json</Filter>
     </None>
-    <None Include="res\shader\fragment.frag">
+    <None Include="..\res\shader\fragment.frag">
       <Filter>res\shader</Filter>
     </None>
-    <None Include="res\shader\geometry.geom">
+    <None Include="..\res\shader\geometry.geom">
       <Filter>res\shader</Filter>
     </None>
-    <None Include="res\shader\tessellation.tesc">
+    <None Include="..\res\shader\tessellation.tesc">
       <Filter>res\shader</Filter>
     </None>
-    <None Include="res\shader\tessellation.tese">
+    <None Include="..\res\shader\tessellation.tese">
       <Filter>res\shader</Filter>
     </None>
-    <None Include="res\shader\vertex.vert">
+    <None Include="..\res\shader\vertex.vert">
       <Filter>res\shader</Filter>
     </None>
-    <None Include="res\json\infinite.json">
+    <None Include="..\res\json\infinite.json">
       <Filter>src</Filter>
     </None>
   </ItemGroup>

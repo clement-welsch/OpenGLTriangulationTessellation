@@ -14,10 +14,10 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 
-const static std::string s_squareShapeFilePath = "res/json/square.json";
-const static std::string s_cShapeFilePath = "res/json/c.json";
-const static std::string s_infiniteShapeFilePath = "res/json/infinite.json";
-const static std::string s_chaosShapeFilePath = "res/json/chaos.json";
+const static std::string s_squareShapeFilePath = "../res/json/square.json";
+const static std::string s_cShapeFilePath = "../res/json/c.json";
+const static std::string s_infiniteShapeFilePath = "../res/json/infinite.json";
+const static std::string s_chaosShapeFilePath = "../res/json/chaos.json";
 
 int main(void)
 {
