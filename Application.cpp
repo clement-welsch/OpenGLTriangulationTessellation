@@ -18,6 +18,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+const static std::string s_triangleShapeFilePath = "../res/json/triangle.json";
 const static std::string s_squareShapeFilePath = "../res/json/square.json";
 const static std::string s_cShapeFilePath = "../res/json/c.json";
 const static std::string s_infiniteShapeFilePath = "../res/json/infinite.json";
@@ -35,11 +36,21 @@ int main(void)
 	//---Shapes
 
 
+	Shape shapeTriangle(s_triangleShapeFilePath);
 	Shape shapeSquare(s_squareShapeFilePath);
 	Shape shapeInfinite(s_infiniteShapeFilePath);
 	Shape shapeC(s_cShapeFilePath);
 
 	std::vector<Shape> listShapes;
+
+	if (shapeTriangle.m_listVertex.empty() || shapeTriangle.m_listIndex.empty())
+	{
+		std::cout << "The file triangle.json has not been found or is empty!" << std::endl;
+	}
+	else
+	{
+		listShapes.push_back(shapeTriangle);
+	}
 
 	if (shapeSquare.m_listVertex.empty() || shapeSquare.m_listIndex.empty())
 	{

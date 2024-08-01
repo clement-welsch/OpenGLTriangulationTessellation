@@ -1,9 +1,17 @@
 # README **Triangulation and Tessellation**
 
-![TNT_shape](https://github.com/user-attachments/assets/c66241dd-2932-4af3-959b-f6d915325f73){ .image25percent }
-![TNT_square_tess](https://github.com/user-attachments/assets/4a8e2a28-0a79-4d75-9be4-3c4f239a8cf2){ .image50percent }
-![TNT_infinite_tess](https://github.com/user-attachments/assets/602570a6-0e6c-4b48-a3dc-2fb703a8b636){ .image75percent }
-![TNT_c_tess](https://github.com/user-attachments/assets/3fde0f61-2f88-4e6e-9ffb-f232700c71b5)
+---
+
+## Result
+
+### Change the Shape
+<img src="./res/gif/TNT_shapes.gif" width="200"/>
+
+### Change the Tessellation
+<img src="./res/gif/TNT_tri_tess.gif" width="200"/>
+<img src="./res/gif/TNT_square_tess.gif" width="200"/>
+<img src="./res/gif/TNT_infinite_tess.gif" width="200"/>
+<img src="./res/gif/TNT_c_tess.gif" width="200"/>
 
 ---
 
@@ -34,12 +42,13 @@ If you are using another version of VS or c++ compiler, you might need to 'Retar
 
 Press 'F7' to check if the project compiles correctly.
 Press 'F5' to launch the execution of the project.
-Once the project is launched, a console will open with the possibility to choose on shape to test :
-1- Square shape
-2- Infinite shape
-3- C letter shape
-4- Chaos shape
-5- Quit the program
+Once the project is launched, an imgui box will allow you to change the shape to test :
+1- Triangle shape
+2- Square shape
+3- Infinite shape
+4- C letter shape
+
+<img src="./res/gif/TNT_shapes.gif" width="400"/>
 
 ## Folder architecture
 \api contains the dependencies.
@@ -93,6 +102,13 @@ There is a example if we use another parameter of tessellation :
 <img src="./res/result/InfiniteTess22.png" alt="Infinite Tessellation 22" width="200"/>
 <img src="./res/result/CTess22.png" alt="C Tessellation 22" width="200"/>
 
+### How to use
+You can use the imgui box to change the tesselation parameters (Inner/Outer) through sliders.
+<img src="./res/gif/TNT_tri_tess.gif" width="400"/>
+<img src="./res/gif/TNT_square_tess.gif" width="400"/>
+<img src="./res/gif/TNT_infinite_tess.gif" width="400"/>
+<img src="./res/gif/TNT_c_tess.gif" width="400"/>
+
 ### Rendering
 Due to the obligation to the Tessellation shader which can only render patches.
 We use two shaders : Basic (Vertex/Fragment shader) and Tessellation (Vertex/Controller/Evaluation/Geometry/Fragment).
@@ -103,7 +119,7 @@ The rendering is quite simple, we print one by one each layer :
 + Tessellation (red lines), 'Tessellation Shader'
 + Vertices (blue), 'Basic Shader'
 
-### src
+### Bibliography
 #### OpenGL Project Setup ####
 + (1) https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
 
