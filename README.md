@@ -3,10 +3,12 @@
 ---
 
 ## Result
+
 ### Change the Shape
-<img src="./res/gif/TNT_shape.gif" width="200"/>
+<img src="./res/gif/TNT_shapes.gif" width="200"/>
 
 ### Change the Tessellation
+<img src="./res/gif/TNT_tri_tess.gif" width="200"/>
 <img src="./res/gif/TNT_square_tess.gif" width="200"/>
 <img src="./res/gif/TNT_infinite_tess.gif" width="200"/>
 <img src="./res/gif/TNT_c_tess.gif" width="200"/>
@@ -109,7 +111,7 @@ The rendering is quite simple, we print one by one each layer :
 + Tessellation (red lines), 'Tessellation Shader'
 + Vertices (blue), 'Basic Shader'
 
-### src
+### Bibliography
 #### OpenGL Project Setup ####
 + (1) https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&index=1
 
