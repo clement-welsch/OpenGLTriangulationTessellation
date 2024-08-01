@@ -42,12 +42,13 @@ If you are using another version of VS or c++ compiler, you might need to 'Retar
 
 Press 'F7' to check if the project compiles correctly.
 Press 'F5' to launch the execution of the project.
-Once the project is launched, a console will open with the possibility to choose on shape to test :
-1- Square shape
-2- Infinite shape
-3- C letter shape
-4- Chaos shape
-5- Quit the program
+Once the project is launched, an imgui box will allow you to change the shape to test :
+1- Triangle shape
+2- Square shape
+3- Infinite shape
+4- C letter shape
+
+<img src="./res/gif/TNT_shapes.gif" width="400"/>
 
 ## Folder architecture
 \api contains the dependencies.
@@ -100,6 +101,13 @@ There is a example if we use another parameter of tessellation :
 <img src="./res/result/SquareTess22.png" alt="Square Tessellation 22" width="200"/>
 <img src="./res/result/InfiniteTess22.png" alt="Infinite Tessellation 22" width="200"/>
 <img src="./res/result/CTess22.png" alt="C Tessellation 22" width="200"/>
+
+### How to use
+You can use the imgui box to change the tesselation parameters (Inner/Outer) through sliders.
+<img src="./res/gif/TNT_tri_tess.gif" width="400"/>
+<img src="./res/gif/TNT_square_tess.gif" width="400"/>
+<img src="./res/gif/TNT_infinite_tess.gif" width="400"/>
+<img src="./res/gif/TNT_c_tess.gif" width="400"/>
 
 ### Rendering
 Due to the obligation to the Tessellation shader which can only render patches.
